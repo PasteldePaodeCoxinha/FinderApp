@@ -28,7 +28,7 @@ Na tabela abaixo é possível visualizar os resultados de cada Sprint clicando e
 <!-- [ver entrega](link da sprint correspondente) -->
 | Sprint |  Entrega   |            Status           | Relatório |
 |:------:|:----------:|:---------------------------:|:---------:|
-| 01     | 09/09/2024 | Finalizada!  | [Ver entrega](https://github.com/equipedevo/API_2/blob/main/doc/sprints/Sprint_1.md) |
+| 01     | 09/09/2024 | Finalizada!  | [Ver entrega](https://github.com/PasteldePaodeCoxinha/FinderApp/blob/Sprint-1/README.md#entrega) |
 | 02     | 04/10/2024 | Em andamento!  | ---------------- |
 | 03     | 25/10/2024 | Pendente!  | ---------------- |
 | 04     | 18/11/2024 | Pendente!  | ---------------- |
