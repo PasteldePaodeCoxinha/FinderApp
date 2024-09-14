@@ -1,11 +1,4 @@
 import React from 'react';
-import {
-  useColorScheme
-} from 'react-native';
-
-import {
-  Colors
-} from 'react-native/Libraries/NewAppScreen';
 
 import { NavigationContainer, Theme } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -20,8 +13,6 @@ import { ThemeProvider } from './src/contexts/ThemeContext';
 const Stack = createNativeStackNavigator();
 
 function App(): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-
   return (
     <ThemeProvider>
       <NavigationContainer>
