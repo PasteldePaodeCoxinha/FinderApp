@@ -2,8 +2,8 @@ import { Button, Text, View } from "react-native";
 import Nav from "../components/Nav";
 
 interface Props {
-    navigation: any
-}
+    navigation: any;
+};
 
 export default function Chat({ navigation }: Props) {
     return (

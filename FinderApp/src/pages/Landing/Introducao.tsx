@@ -1,12 +1,12 @@
-import { Button, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import LandingIntroducao from "../components/LandingIntroducao";
-import useTheme from "../hooks/UseTheme";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import LandingIntroducao from "../../components/LandingIntroducao";
+import useTheme from "../../hooks/UseTheme";
 
 interface Props {
-    navigation: any
-}
+    navigation: any;
+};
 
-export default function Landing({ navigation }: Props) {
+export default function Introducao({ navigation }: Props) {
     const { theme } = useTheme();
 
     const styles = StyleSheet.create({
@@ -80,5 +80,5 @@ export default function Landing({ navigation }: Props) {
                 </TouchableOpacity>
             </View>
         </View>
-    )
+    );
 }

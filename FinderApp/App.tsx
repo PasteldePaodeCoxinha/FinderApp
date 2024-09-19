@@ -1,14 +1,13 @@
 import React from 'react';
-
-import { NavigationContainer, Theme } from '@react-navigation/native';
+import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import Landing from './src/pages/Landing';
 import Profile from './src/pages/Profile';
 import Search from './src/pages/Search';
 import Matches from './src/pages/Matches';
 import List from './src/pages/List';
 import Chat from './src/pages/Chat';
 import { ThemeProvider } from './src/contexts/ThemeContext';
+import Landing from './src/pages/Landing';
 
 const Stack = createNativeStackNavigator();
 

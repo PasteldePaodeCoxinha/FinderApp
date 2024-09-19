@@ -2,8 +2,8 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Button, Text, View } from "react-native";
 
 interface Props {
-    navigation: any
-}
+    navigation: any;
+};
 
 const Stack = createNativeStackNavigator();
 
