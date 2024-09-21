@@ -10,12 +10,12 @@ export function ThemeProvider({ children }: any) {
             primary: "#F05050",
             secondary: "#F05050",
             text: "#1E1E1E",
-            border: "#F05050"
+            border: "#DDD9D9"
         }
     } as ThemeProps);
-
+    
     return (
-        <ThemeContext.Provider value={{ theme, setTheme }}>
+        <ThemeContext.Provider value={{ theme, setTheme } as ThemeContextProps}>
             {children}
         </ThemeContext.Provider>
     );

@@ -14,7 +14,7 @@ export default function Matches({ navigation }: Props) {
             ></Nav>
             <Button
                 title="Login"
-                onPress={() => navigation.navigate('Login', { name: 'Jane' })}
+                onPress={() => navigation.navigate("Landing")}
             />
         </View>
     )

@@ -15,6 +15,7 @@ export default function Introducao({ navigation }: Props) {
             justifyContent: "space-between",
             height: "100%",
             paddingBottom: 75,
+            backgroundColor: theme.colors.background
         },
         titulo: {
             margin: "auto",
@@ -68,13 +69,13 @@ export default function Introducao({ navigation }: Props) {
             <View style={styles.buttons}>
                 <TouchableOpacity
                     style={styles.btnEntrar}
-                    onPress={() => navigation.navigate('Login')}
+                    onPress={() => navigation.navigate("Login")}
                 >
                     <Text style={styles.btnTexto}>Entrar</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                     style={styles.btnCadastrar}
-                    onPress={() => navigation.navigate('Cadastro')}
+                    onPress={() => navigation.navigate("Cadastro")}
                 >
                     <Text style={styles.btnTexto}>Cadastrar</Text>
                 </TouchableOpacity>

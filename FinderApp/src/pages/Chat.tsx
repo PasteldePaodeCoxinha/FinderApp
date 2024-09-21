@@ -14,7 +14,7 @@ export default function Chat({ navigation }: Props) {
             ></Nav>
             <Button
                 title="Login"
-                onPress={() => navigation.navigate('Login')}
+                onPress={() => navigation.navigate("Landing")}
             />
         </View>
     )

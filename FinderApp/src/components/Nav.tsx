@@ -1,55 +1,45 @@
-import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
+import { StyleSheet, View } from "react-native";
+import NavButton from "./inputs/NavButton";
 
 interface Props {
     navigation: any
 }
 
 export default function Nav({ navigation }: Props) {
-    console.log(typeof navigation, navigation);
+    const styles = StyleSheet.create({
+        nav: {
+            backgroundColor: "white"
+        },
+        image: {
+            width: 45,
+            height: 45,
+        },
+    });
+
     return (
         <View
             style={styles.nav}
         >
-            <TouchableOpacity onPress={() => navigation.navigate('Search')}>
-                <Image
-                    source={require("../../assets/images/nav/search.png")}
-                    style={styles.image}
-                ></Image>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => navigation.navigate('Matches')}>
-                <Image
-                    source={require("../../assets/images/nav/matches.png")}
-                    style={styles.image}
-                ></Image>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => navigation.navigate('List')}>
-                <Image
-                    source={require("../../assets/images/nav/list.png")}
-                    style={styles.image}
-                ></Image>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => navigation.navigate('Chat')}>
-                <Image
-                    source={require("../../assets/images/nav/chat.png")}
-                    style={styles.image}
-                ></Image>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
-                <Image
-                    source={require("../../assets/images/nav/profile.png")}
-                    style={styles.image}
-                ></Image>
-            </TouchableOpacity>
+            <NavButton
+                image={require("../../assets/images/nav/search.png")}
+                callback={() => navigation.navigate("Search")}
+            ></NavButton>
+            <NavButton
+                image={require("../../assets/images/nav/matches.png")}
+                callback={() => navigation.navigate("Matches")}
+            ></NavButton>
+            <NavButton
+                image={require("../../assets/images/nav/list.png")}
+                callback={() => navigation.navigate("List")}
+            ></NavButton>
+            <NavButton
+                image={require("../../assets/images/nav/chat.png")}
+                callback={() => navigation.navigate("Chat")}
+            ></NavButton>
+            <NavButton
+                image={require("../../assets/images/nav/profile.png")}
+                callback={() => navigation.navigate("Profile")}
+            ></NavButton>
         </View>
     )
 }
-
-const styles = StyleSheet.create({
-    nav: {
-        backgroundColor: "black"
-    },
-    image: {
-        width: 45,
-        height: 45,
-    },
-});

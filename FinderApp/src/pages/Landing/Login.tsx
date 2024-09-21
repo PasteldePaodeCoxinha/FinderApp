@@ -1,6 +1,7 @@
+import { useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import useTheme from "../../hooks/UseTheme";
-import LandingIntroducao from "../../components/LandingIntroducao";
+import CustomTextInput from "../../components/inputs/CustomTextInput";
 
 interface Props {
     navigation: any;
@@ -8,6 +9,8 @@ interface Props {
 
 export default function Login({ navigation }: Props) {
     const { theme } = useTheme();
+    const [email, setEmail] = useState<string>();
+    const [senha, setSenha] = useState<string>();
 
     const styles = StyleSheet.create({
         pagina: {
@@ -15,6 +18,7 @@ export default function Login({ navigation }: Props) {
             justifyContent: "space-between",
             height: "100%",
             paddingBottom: 75,
+            backgroundColor: theme.colors.background
         },
         titulo: {
             margin: "auto",
@@ -43,6 +47,10 @@ export default function Login({ navigation }: Props) {
         btnTexto: {
             color: theme.colors.text,
             fontSize: 24
+        },
+        inputContainer: {
+            display: "flex",
+            marginHorizontal: 50
         }
     });
 
@@ -50,12 +58,22 @@ export default function Login({ navigation }: Props) {
         <View style={styles.pagina}>
             <Text style={styles.titulo}>Bem-vindo ao <Text style={styles.appNameText}>Finder</Text></Text>
 
-            // Campos de email e senha
+            <View style={styles.inputContainer}>
+                <CustomTextInput
+                    setText={setEmail}
+                    placeholder="E-mail"
+                />
+                <CustomTextInput
+                    setText={setSenha}
+                    placeholder="Senha"
+                    secure={true}
+                />
+            </View>
 
             <View style={styles.buttons}>
                 <TouchableOpacity
                     style={styles.btnEntrar}
-                    onPress={() => navigation.navigate('Login')}
+                    onPress={() => navigation.navigate("Profile")}
                 >
                     <Text style={styles.btnTexto}>Entrar</Text>
                 </TouchableOpacity>

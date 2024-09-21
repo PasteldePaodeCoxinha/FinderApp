@@ -1,19 +1,17 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import Basico from "./Basico";
-import GostosInteresses from "./GostosInteresses";
-import Bio from "./Bio";
+import ProfileBase from "./ProfileBase";
 
 const Stack = createNativeStackNavigator();
 
-export default function Cadastro() {
+export default function Profile() {
     return (
         <Stack.Navigator>
             <Stack.Screen
-                name="CadastroBasico"
-                component={Basico}
+                name="ProfileBase"
+                component={ProfileBase}
                 options={{ headerShown: false }}
             />
-            <Stack.Screen
+            {/* <Stack.Screen
                 name="CadastroGostosInteresses"
                 component={GostosInteresses}
                 options={{ headerShown: false }}
@@ -22,7 +20,7 @@ export default function Cadastro() {
                 name="CadastroBio"
                 component={Bio}
                 options={{ headerShown: false }}
-            />
+            /> */}
         </Stack.Navigator>
     );
 }
