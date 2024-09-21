@@ -19,9 +19,9 @@ export default function CustomTextInput(props: Props) {
             borderColor: (isFocused ? theme.colors.primary : theme.colors.border),
             borderWidth: (isFocused ? 3 : 2),
             borderRadius: 15,
-            marginBottom: 20,
             paddingHorizontal: 10,
-            backgroundColor: "white"
+            backgroundColor: "white",
+            color: theme.colors.text
         },
         output: {
             fontSize: 18,

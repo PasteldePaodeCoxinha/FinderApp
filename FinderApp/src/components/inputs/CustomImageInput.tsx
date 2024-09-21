@@ -1,17 +1,18 @@
 import { useState } from "react";
-import { StyleProp, StyleSheet, TextInput, View, ViewStyle } from "react-native";
+import { Image, StyleProp, StyleSheet, TouchableOpacity, View, ViewStyle } from "react-native";
+import { launchImageLibrary, MediaType } from 'react-native-image-picker';
 import useTheme from "../../hooks/UseTheme";
 
 interface Props {
     style?: StyleProp<ViewStyle>,
-    // setImage: (text: string) => void;
-    placeholder?: string;
+    setImage: (b64: string) => void;
     secure?: boolean;
 };
 
 export default function CustomImageInput(props: Props) {
     const { theme } = useTheme();
     const [isFocused, setIsFocused] = useState<boolean>(false);
+    const [imageB64, setImageB64] = useState<string>("");
 
     const styles = StyleSheet.create({
         input: {
@@ -19,25 +20,62 @@ export default function CustomImageInput(props: Props) {
             borderColor: (isFocused ? theme.colors.primary : theme.colors.border),
             borderWidth: (isFocused ? 3 : 2),
             borderRadius: 15,
-            marginBottom: 20,
             paddingHorizontal: 10,
-            backgroundColor: "white"
+            backgroundColor: "white",
+            color: theme.colors.text
+        },
+        image: {
+            width: 100,
+            height: 100,
+        },
+        touchable: {
+            borderRadius: 15,
+            borderWidth: 3,
+            borderColor: theme.colors.border,
+            padding: 10,
+            margin: "auto",
+            width: "100%"
         },
         output: {
             fontSize: 18,
         },
     });
 
+    function selectImage() {
+        const options = {
+            selectionLimit: 1,
+            mediaType: "photo" as MediaType,
+            includeBase64: true
+        };
+
+        launchImageLibrary(options, (response) => {
+            if (response.assets && response.assets.length > 0) {
+                const base64 = response.assets[0].base64;
+                if (base64 != undefined) {
+                    setImageB64(base64);
+                    props.setImage(base64);
+                }
+            }
+        });
+    };
+
     return (
         <View style={props.style}>
-            <TextInput
-                style={styles.input}
-                placeholder={props.placeholder}
-                // onChangeText={props.setText}
-                secureTextEntry={props.secure}
+            <TouchableOpacity
+                style={styles.touchable}
+                onPress={selectImage}
                 onFocus={() => setIsFocused(true)}
                 onBlur={() => setIsFocused(false)}
-            />
+            >
+                <Image
+                    style={styles.image}
+                    source={
+                        imageB64 ? ({
+                            uri: `data:image/jpeg;base64,${imageB64}`
+                        }) : require("../../../assets/images/nav/profile.png")
+                    }
+                />
+            </TouchableOpacity>
         </View>
     );
 }
