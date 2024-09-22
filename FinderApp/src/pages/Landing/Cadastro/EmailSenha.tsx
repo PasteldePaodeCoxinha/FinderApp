@@ -1,10 +1,7 @@
 import { StyleSheet, Text, View } from "react-native";
-import CustomImageInput from "../../../components/inputs/CustomImageInput";
 import useTheme from "../../../hooks/UseTheme";
 import CustomButton from "../../../components/inputs/CustomButton";
 import CustomTextInput from "../../../components/inputs/CustomTextInput";
-import CustomDateInput from "../../../components/inputs/CustomDateInput";
-import CustomLocationInput from "../../../components/inputs/CustomLocationInput";
 import { useState } from "react";
 
 interface Props {
@@ -12,17 +9,15 @@ interface Props {
     route: any;
 };
 
-export default function Basico({ navigation, route }: Props) {
+export default function EmailSenha({ navigation, route }: Props) {
     const {
-        propSetNome,
-        propSetNascimento,
-        propSetProfissao,
-        propSetEscolaridade
+        propSetEmail,
+        propSetSenha,
     } = route.params;
     const { theme } = useTheme();
-    // const [tmpImage, setTmpImage] = useState<string>();
-    // const [tmpNascimento, setTmpNascimento] = useState<Date>();
-    // const [tmpLocal, setTmpLocal] = useState<{ latitude: number; longitude: number }>();
+    const [tmpEmail, setTmpEmail] = useState<string>();
+    const [tmpSenha, setTmpSenha] = useState<string>();
+    const [confSenha, setConfSenha] = useState<string>();
 
     const styles = StyleSheet.create({
         pagina: {
@@ -46,6 +41,9 @@ export default function Basico({ navigation, route }: Props) {
             margin: "auto",
             maxWidth: "80%"
         },
+        textInput: {
+            minWidth: "100%"
+        },
         btnContinuar: {
             backgroundColor: theme.colors.primary,
             margin: "auto",
@@ -68,8 +66,18 @@ export default function Basico({ navigation, route }: Props) {
         }
     });
 
+    function ValidarEmail() {
+        if (!tmpEmail) return false;
+        const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return regex.test(tmpEmail);
+    }
+
     function Continuar() {
-        navigation.navigate("CadastroGostosInteresses");
+        if (ValidarEmail() && tmpSenha === confSenha) {
+            propSetEmail(tmpEmail);
+            propSetSenha(tmpSenha);
+            navigation.navigate("CadastroBasico");
+        }
     }
 
     return (
@@ -77,28 +85,25 @@ export default function Basico({ navigation, route }: Props) {
             <Text style={styles.titulo}>Preencha algumas informações básicas</Text>
 
             <View style={styles.inputs}>
-                <CustomImageInput setImage={() => { }} />
                 <CustomTextInput
-                    setText={propSetNome}
-                    placeholder="Nome"
-                />
-
-                <View style={styles.nascimentoLocalizacao}>
-                    <CustomDateInput
-                        setDate={propSetNascimento}
-                    />
-                    <CustomLocationInput
-                        setLocation={() => { }}
-                    />
-                </View>
-
-                <CustomTextInput
-                    setText={propSetProfissao}
-                    placeholder="Profissão"
+                    setText={setTmpEmail}
+                    placeholder="Email"
+                    obrigatorio={true}
+                    errMsg={tmpEmail && !ValidarEmail() ? "E-mail inválido" : ""}
                 />
                 <CustomTextInput
-                    setText={propSetEscolaridade}
-                    placeholder="Escolaridade"
+                    setText={setTmpSenha}
+                    placeholder="Senha"
+                    secure={true}
+                    obrigatorio={true}
+                    errMsg={tmpSenha != confSenha ? "Senhas devem ser iguais" : ""}
+                />
+                <CustomTextInput
+                    setText={setConfSenha}
+                    placeholder="Confirmar Senha"
+                    secure={true}
+                    obrigatorio={true}
+                    errMsg={tmpSenha != confSenha ? "As senhas devem ser iguais" : ""}
                 />
             </View>
 

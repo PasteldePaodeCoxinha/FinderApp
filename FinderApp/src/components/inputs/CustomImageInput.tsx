@@ -1,12 +1,10 @@
 import { useState } from "react";
-import { Image, StyleProp, StyleSheet, TouchableOpacity, View, ViewStyle } from "react-native";
+import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
 import { launchImageLibrary, MediaType } from 'react-native-image-picker';
 import useTheme from "../../hooks/UseTheme";
 
 interface Props {
-    style?: StyleProp<ViewStyle>,
     setImage: (b64: string) => void;
-    secure?: boolean;
 };
 
 export default function CustomImageInput(props: Props) {
@@ -15,15 +13,6 @@ export default function CustomImageInput(props: Props) {
     const [imageB64, setImageB64] = useState<string>("");
 
     const styles = StyleSheet.create({
-        input: {
-            height: 40,
-            borderColor: (isFocused ? theme.colors.primary : theme.colors.border),
-            borderWidth: (isFocused ? 3 : 2),
-            borderRadius: 15,
-            paddingHorizontal: 10,
-            backgroundColor: "white",
-            color: theme.colors.text
-        },
         image: {
             width: 100,
             height: 100,
@@ -60,7 +49,7 @@ export default function CustomImageInput(props: Props) {
     };
 
     return (
-        <View style={props.style}>
+        <View>
             <TouchableOpacity
                 style={styles.touchable}
                 onPress={selectImage}
