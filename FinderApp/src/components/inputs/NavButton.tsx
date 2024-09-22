@@ -1,4 +1,5 @@
 import { Image, StyleSheet, TouchableOpacity } from "react-native";
+import useTheme from "../../hooks/UseTheme";
 
 interface Props {
     image: any;
@@ -6,18 +7,29 @@ interface Props {
 };
 
 export default function NavButton(props: Props) {
+    const { theme } = useTheme();
+
     const styles = StyleSheet.create({
         image: {
-            width: 45,
-            height: 45,
+            width: 35,
+            height: 35,
+        },
+        touchable: {
+            padding: 8,
+            borderRadius: 100,
+            borderColor: theme.colors.border,
+            borderWidth: 2
         },
     });
 
     return (
-        <TouchableOpacity onPress={props.callback}>
+        <TouchableOpacity
+            style={styles.touchable}
+            onPress={props.callback}
+        >
             <Image
-                source={props.image}
                 style={styles.image}
+                source={props.image}
             ></Image>
         </TouchableOpacity>
     );

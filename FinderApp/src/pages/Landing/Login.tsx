@@ -73,7 +73,7 @@ export default function Login({ navigation }: Props) {
             <View style={styles.buttons}>
                 <TouchableOpacity
                     style={styles.btnEntrar}
-                    onPress={() => navigation.navigate("Profile")}
+                    onPress={() => navigation.navigate("List")}
                 >
                     <Text style={styles.btnTexto}>Entrar</Text>
                 </TouchableOpacity>
