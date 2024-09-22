@@ -10,7 +10,7 @@ interface Props {
     errMsg?: string;
 };
 
-export default function CustomTextInput(props: Props) {
+export default function CustomTextBoxInput(props: Props) {
     const { theme } = useTheme();
     const [touched, setTouched] = useState<boolean>(false);
     const [isFocused, setIsFocused] = useState<boolean>(false);
@@ -41,14 +41,16 @@ export default function CustomTextInput(props: Props) {
             alignItems: "center"
         },
         input: {
-            height: 40,
+            height: 300,
             minWidth: "100%",
             borderColor: (isFocused ? theme.colors.primary : theme.colors.border),
             borderWidth: (isFocused ? 3 : 2),
             borderRadius: 15,
             paddingHorizontal: 10,
             backgroundColor: "white",
-            color: theme.colors.text
+            color: theme.colors.text,
+            textAlignVertical: "top",
+            fontSize: 18,
         },
         textoErr: {
             color: theme.colors.primary
@@ -60,6 +62,7 @@ export default function CustomTextInput(props: Props) {
             <TextInput
                 style={styles.input}
                 placeholder={props.placeholder}
+                multiline={true}
                 onChangeText={(txt: string) => { setText(txt); props.setText(txt); }}
                 secureTextEntry={props.secure}
                 onFocus={() => setIsFocused(true)}

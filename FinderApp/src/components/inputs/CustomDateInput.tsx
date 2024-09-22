@@ -23,9 +23,6 @@ export default function CustomDateInput(props: Props) {
             width: 25,
             height: 25,
         },
-        output: {
-            fontSize: 18,
-        },
         touchable: {
             borderRadius: 15,
             borderColor: (date != null ? "green" : theme.colors.border),

@@ -25,9 +25,6 @@ export default function CustomImageInput(props: Props) {
             margin: "auto",
             width: "100%"
         },
-        output: {
-            fontSize: 18,
-        },
     });
 
     function selectImage() {

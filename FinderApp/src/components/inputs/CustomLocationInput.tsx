@@ -22,9 +22,6 @@ export default function CustomLocationInput(props: Props) {
             width: 25,
             height: 25,
         },
-        output: {
-            fontSize: 18,
-        },
         touchable: {
             borderRadius: 15,
             borderColor: (location != null ? "green" : theme.colors.border),

@@ -96,7 +96,6 @@ export default function EmailSenha({ navigation, route }: Props) {
                     placeholder="Senha"
                     secure={true}
                     obrigatorio={true}
-                    errMsg={tmpSenha != confSenha ? "Senhas devem ser iguais" : ""}
                 />
                 <CustomTextInput
                     setText={setConfSenha}
