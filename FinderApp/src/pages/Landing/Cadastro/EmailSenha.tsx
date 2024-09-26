@@ -5,18 +5,15 @@ import CustomTextInput from "../../../components/inputs/CustomTextInput";
 import { useState } from "react";
 
 interface Props {
-    navigation: any;
-    route: any;
+    propSetEmail: React.Dispatch<React.SetStateAction<string>>;
+    propSetSenha: React.Dispatch<React.SetStateAction<string>>;
+    continuar: () => void;
 };
 
-export default function EmailSenha({ navigation, route }: Props) {
-    const {
-        propSetEmail,
-        propSetSenha,
-    } = route.params;
+export default function EmailSenha(props: Props) {
     const { theme } = useTheme();
-    const [tmpEmail, setTmpEmail] = useState<string>();
-    const [tmpSenha, setTmpSenha] = useState<string>();
+    const [tmpEmail, setTmpEmail] = useState<string>("");
+    const [tmpSenha, setTmpSenha] = useState<string>("");
     const [confSenha, setConfSenha] = useState<string>();
 
     const styles = StyleSheet.create({
@@ -74,9 +71,9 @@ export default function EmailSenha({ navigation, route }: Props) {
 
     function Continuar() {
         if (ValidarEmail() && tmpSenha === confSenha) {
-            propSetEmail(tmpEmail);
-            propSetSenha(tmpSenha);
-            navigation.navigate("CadastroBasico");
+            props.propSetEmail(tmpEmail);
+            props.propSetSenha(tmpSenha);
+            props.continuar();
         }
     }
 

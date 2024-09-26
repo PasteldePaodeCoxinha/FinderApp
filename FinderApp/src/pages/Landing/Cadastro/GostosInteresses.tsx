@@ -1,24 +1,19 @@
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { StyleSheet, Text, View } from "react-native";
 import CustomButton from "../../../components/inputs/CustomButton";
 import CustomOptionsInput from "../../../components/inputs/CustomOptionsInput";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useTheme from "../../../hooks/UseTheme";
 
 interface Props {
-    navigation: any;
-    route: any;
+    propsSetGostosSelecionados: React.Dispatch<React.SetStateAction<{ id: number; nome: string; }[]>>;
+    propsSetInteressesSelecionados: React.Dispatch<React.SetStateAction<{ id: number; nome: string; }[]>>;
+    continuar: () => void;
 };
 
-const Stack = createNativeStackNavigator();
-
-export default function GostosInteresses({ navigation, route }: Props) {
-    // const { } = route.params;
+export default function GostosInteresses(props: Props) {
     const { theme } = useTheme();
-    const [gostosSelecionados, setGostosSelecionados] = useState<Array<{ nome: string, id: number }>>();
-    const [interessesSelecionados, setInteressesSelecionados] = useState<Array<{ nome: string, id: number }>>();
-    const [gostos, setGostos] = useState<Array<{ nome: string, id: number }>>();
-    const [interesses, setInteresses] = useState<Array<{ nome: string, id: number }>>();
+    const [gostos, setGostos] = useState<Array<{ id: number; nome: string; }>>([]);
+    const [interesses, setInteresses] = useState<Array<{ id: number; nome: string; }>>([]);
 
     const styles = StyleSheet.create({
         pagina: {
@@ -67,12 +62,34 @@ export default function GostosInteresses({ navigation, route }: Props) {
         }
     });
 
+    useEffect(() => {
+        async function getGostos() {
+            const response = await fetch("https://finder-app-back.vercel.app/gosto/lista");
+
+            const data = await response.json();
+            if (response.status == 200) {
+                setGostos(data.gostos);
+            } else {
+                console.log("Falha buscando gostos:", data);
+            }
+        }
+        async function getInteresses() {
+            const response = await fetch("https://finder-app-back.vercel.app/interesse/lista");
+
+            const data = await response.json();
+            if (response.status == 200) {
+                setInteresses(data.interesses);
+            } else {
+                console.log("Falha buscando interesses:", data);
+            }
+        }
+
+        getGostos();
+        getInteresses();
+    }, []);
+
     function Continuar() {
-        // if (ValidarEmail() && tmpSenha === confSenha) {
-        //     propSetEmail(tmpEmail);
-        //     propSetSenha(tmpSenha);
-            navigation.navigate("CadastroBio");
-        // }
+        props.continuar();
     }
 
     return (
@@ -80,29 +97,22 @@ export default function GostosInteresses({ navigation, route }: Props) {
             <Text style={styles.titulo}>Diga mais sobre você</Text>
 
             <View style={styles.inputs}>
-                <CustomOptionsInput
-                    options={gostos || [
-                        { nome: "gosto 0", id: 0 },
-                        { nome: "gosto 1", id: 1 },
-                        { nome: "gosto 2", id: 2 },
-                        { nome: "gosto 3", id: 3 },
-                        { nome: "gosto 4", id: 4 },
-                        { nome: "gosto 5", id: 5 },
-                        { nome: "gosto 6", id: 6 },
-                        { nome: "gosto 7", id: 7 },
-                    ]}
-                    setOptions={setGostosSelecionados}
-                    titulo="Email"
-                    minSelected={5}
-                // errMsg={tmpEmail && !ValidarEmail() ? "E-mail inválido" : ""}
-                />
-                <CustomOptionsInput
-                    options={interesses || []}
-                    setOptions={setInteressesSelecionados}
-                    titulo="Senha"
-                    minSelected={3}
-                // errMsg={tmpSenha != confSenha ? "Senhas devem ser iguais" : ""}
-                />
+                {gostos.length > 0 && (
+                    <CustomOptionsInput
+                        options={gostos}
+                        setOptions={props.propsSetGostosSelecionados}
+                        titulo="Quais são seus gostos?"
+                        minSelected={5}
+                    />
+                )}
+                {interesses.length > 0 && (
+                    <CustomOptionsInput
+                        options={interesses}
+                        setOptions={props.propsSetInteressesSelecionados}
+                        titulo="Quais são seus interesses?"
+                        minSelected={3}
+                    />
+                )}
             </View>
 
             <CustomButton

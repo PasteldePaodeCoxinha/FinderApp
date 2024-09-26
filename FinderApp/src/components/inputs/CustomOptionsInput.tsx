@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import useTheme from "../../hooks/UseTheme";
 
 interface Props {
-    options: Array<{ nome: string, id: number }>;
-    setOptions: (options: Array<{ nome: string, id: number }>) => void;
+    options: Array<{ id: number; nome: string; }>;
+    setOptions: (options: Array<{ id: number; nome: string; }>) => void;
     titulo: string;
     minSelected: number;
 };
@@ -12,13 +12,13 @@ interface Props {
 export default function CustomOptionsInput(props: Props) {
     const { theme } = useTheme();
     const [selectedOptions, setSelectedOptions] = useState<Array<{
-        nome: string,
         id: number,
+        nome: string,
         selected: boolean
     }>>(props.options.map((o) => {
         return {
-            nome: o.nome,
             id: o.id,
+            nome: o.nome,
             selected: false
         }
     }));
@@ -32,6 +32,7 @@ export default function CustomOptionsInput(props: Props) {
             borderColor: theme.colors.border,
             gap: 10,
             padding: 5,
+            maxHeight: 250,
         },
         output: {
             fontSize: 18,
@@ -98,9 +99,9 @@ export default function CustomOptionsInput(props: Props) {
                 <Text style={styles.texto}>{props.titulo}</Text>
                 <Text style={styles.texto}>{selectedCount()}/{props.minSelected}</Text>
             </View>
-            <View style={styles.optionsContainer}>
+            <ScrollView style={styles.optionsContainer}>
                 {optionsButtons()}
-            </View>
+            </ScrollView>
         </View>
     );
 }

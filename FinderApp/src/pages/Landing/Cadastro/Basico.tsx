@@ -5,24 +5,18 @@ import CustomButton from "../../../components/inputs/CustomButton";
 import CustomTextInput from "../../../components/inputs/CustomTextInput";
 import CustomDateInput from "../../../components/inputs/CustomDateInput";
 import CustomLocationInput from "../../../components/inputs/CustomLocationInput";
-import { useState } from "react";
 
 interface Props {
-    navigation: any;
-    route: any;
+    propSetImg: React.Dispatch<React.SetStateAction<string>>;
+    propSetNome: React.Dispatch<React.SetStateAction<string>>;
+    propSetNascimento: React.Dispatch<React.SetStateAction<Date>>;
+    propSetProfissao: React.Dispatch<React.SetStateAction<string>>;
+    propSetEscolaridade: React.Dispatch<React.SetStateAction<string>>;
+    continuar: () => void;
 };
 
-export default function Basico({ navigation, route }: Props) {
-    const {
-        propSetNome,
-        propSetNascimento,
-        propSetProfissao,
-        propSetEscolaridade
-    } = route.params;
+export default function Basico(props: Props) {
     const { theme } = useTheme();
-    // const [tmpImage, setTmpImage] = useState<string>();
-    // const [tmpNascimento, setTmpNascimento] = useState<Date>();
-    // const [tmpLocal, setTmpLocal] = useState<{ latitude: number; longitude: number }>();
 
     const styles = StyleSheet.create({
         pagina: {
@@ -69,7 +63,7 @@ export default function Basico({ navigation, route }: Props) {
     });
 
     function Continuar() {
-        navigation.navigate("CadastroGostosInteresses");
+        props.continuar();
     }
 
     return (
@@ -77,15 +71,15 @@ export default function Basico({ navigation, route }: Props) {
             <Text style={styles.titulo}>Preencha algumas informações básicas</Text>
 
             <View style={styles.inputs}>
-                <CustomImageInput setImage={() => { }} />
+                <CustomImageInput setImage={props.propSetImg} />
                 <CustomTextInput
-                    setText={propSetNome}
+                    setText={props.propSetNome}
                     placeholder="Nome"
                 />
 
                 <View style={styles.nascimentoLocalizacao}>
                     <CustomDateInput
-                        setDate={propSetNascimento}
+                        setDate={props.propSetNascimento}
                     />
                     <CustomLocationInput
                         setLocation={() => { }}
@@ -93,11 +87,11 @@ export default function Basico({ navigation, route }: Props) {
                 </View>
 
                 <CustomTextInput
-                    setText={propSetProfissao}
+                    setText={props.propSetProfissao}
                     placeholder="Profissão"
                 />
                 <CustomTextInput
-                    setText={propSetEscolaridade}
+                    setText={props.propSetEscolaridade}
                     placeholder="Escolaridade"
                 />
             </View>

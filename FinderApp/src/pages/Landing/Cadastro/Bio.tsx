@@ -1,16 +1,14 @@
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { StyleSheet, Text, View } from "react-native";
 import useTheme from "../../../hooks/UseTheme";
 import CustomButton from "../../../components/inputs/CustomButton";
 import CustomTextBoxInput from "../../../components/inputs/CustomTextBoxInput";
 
 interface Props {
-    navigation: any;
+    propsSetDescricao: React.Dispatch<React.SetStateAction<string>>;
+    continuar: () => void;
 };
 
-const Stack = createNativeStackNavigator();
-
-export default function Bio({ navigation }: Props) {
+export default function Bio(props: Props) {
     const { theme } = useTheme();
 
     const styles = StyleSheet.create({
@@ -61,23 +59,17 @@ export default function Bio({ navigation }: Props) {
     });
 
     function Continuar() {
-        // if (ValidarEmail() && tmpSenha === confSenha) {
-        //     propSetEmail(tmpEmail);
-        //     propSetSenha(tmpSenha);
-            navigation.navigate("List");
-        // }
+        props.continuar();
     }
 
     return (
         <View style={styles.pagina}>
             <Text style={styles.titulo}>Como você vive e o que te atrai?</Text>
 
-            {/* <View style={styles.inputs}> */}
             <CustomTextBoxInput
-                setText={() => { }}
+                setText={props.propsSetDescricao}
                 placeholder="Escreva aqui sobre você"
             />
-            {/* </View> */}
 
             <CustomButton
                 onPress={Continuar}
