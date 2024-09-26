@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import useTheme from "../../hooks/UseTheme";
 import CustomTextInput from "../../components/inputs/CustomTextInput";
 
@@ -54,6 +55,22 @@ export default function Login({ navigation }: Props) {
         }
     });
 
+    async function login() {
+        const response = await fetch(`https://finder-app-back.vercel.app/usuario/login?email=${email}&senha=${senha}`);
+
+        const data = await response.json();
+        if (response.status == 200) {
+            try {
+                await AsyncStorage.setItem("idUsuario", data.idUsuario);
+                navigation.navigate("List");
+            } catch (error) {
+                console.error("Falha ao fazer login", error);
+            }
+        } else {
+            console.log("Falha ao fazer login:", data);
+        }
+    }
+
     return (
         <View style={styles.pagina}>
             <Text style={styles.titulo}>Bem-vindo ao <Text style={styles.appNameText}>Finder</Text></Text>
@@ -73,7 +90,7 @@ export default function Login({ navigation }: Props) {
             <View style={styles.buttons}>
                 <TouchableOpacity
                     style={styles.btnEntrar}
-                    onPress={() => navigation.navigate("List")}
+                    onPress={login}
                 >
                     <Text style={styles.btnTexto}>Entrar</Text>
                 </TouchableOpacity>
