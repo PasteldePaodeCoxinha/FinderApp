@@ -61,7 +61,7 @@ export default function Login({ navigation }: Props) {
         const data = await response.json();
         if (response.status == 200) {
             try {
-                await AsyncStorage.setItem("idUsuario", data.idUsuario);
+                await AsyncStorage.setItem("idUsuario", data.idUsuario.toString());
                 navigation.navigate("List");
             } catch (error) {
                 console.error("Falha ao fazer login", error);

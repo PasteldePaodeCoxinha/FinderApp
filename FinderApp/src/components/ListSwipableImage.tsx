@@ -51,7 +51,7 @@ export default function ListSwipableImage(props: Props) {
     return (
         <ImageBackground
             style={styles.backgroundImage}
-            source={props.imageSource}
+            source={{ uri: props.imageSource }}
         >
             <View style={styles.desc}>
                 <Text style={styles.descText}>{props.desc}</Text>

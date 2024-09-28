@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import Nav from "../components/Nav";
 import useTheme from "../hooks/UseTheme";
 import ListSwipableImage from "../components/ListSwipableImage";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 interface Props {
     navigation: any;
@@ -40,36 +41,16 @@ export default function List({ navigation }: Props) {
         },
     });
 
-    const panResponder = useRef(
-        PanResponder.create({
-            onMoveShouldSetPanResponder: (evt, gestureState) => {
-                return Math.abs(gestureState.dx) > 20;
-            },
-            onPanResponderEnd: (evt, gestureState) => {
-                if (gestureState.dx > 50) {
-                    proximoUsuario();
-                    console.log('Swiped Right');
-                } else if (gestureState.dx < -50) {
-                    proximoUsuario();
-                    console.log('Swiped Left');
-                }
-            },
-        })
-    ).current;
-
-    function proximoUsuario() {
-        const proximoIndex = (indexUsuarioAtual + 1) % usuarios.length;
-        setIndexUsuarioAtual(proximoIndex);
-    }
-
     useEffect(() => {
         async function getUsuarios() {
             const response = await fetch("https://finder-app-back.vercel.app/usuario/lista");
 
             const data = await response.json();
             if (response.status == 200) {
-                // filtrar aqui para não aparecer o usuário logado
-                setUsuarios(data.usuarios);
+                const proprioId = await AsyncStorage.getItem("idUsuario");
+                if (proprioId) {
+                    setUsuarios(data.usuarios.filter((u: any) => u.id != parseInt(proprioId)));
+                } else setUsuarios(data.usuarios);
             } else {
                 console.log("Falha buscando usuarios:", data);
             }
@@ -77,6 +58,29 @@ export default function List({ navigation }: Props) {
 
         getUsuarios();
     }, []);
+
+    const panResponder = PanResponder.create({
+        onMoveShouldSetPanResponder: (evt, gestureState) => {
+            return Math.abs(gestureState.dx) > 20;
+        },
+        onPanResponderEnd: (evt, gestureState) => {
+            if (gestureState.dx > 50) {
+                proximoUsuario();
+                console.log('Swiped Right');
+            } else if (gestureState.dx < -50) {
+                proximoUsuario();
+                console.log('Swiped Left');
+            }
+        },
+    });
+
+    function proximoUsuario() {
+        console.log("proximoUsuario usuarios.length", usuarios.length);
+        if (usuarios.length > 1) {
+            const proximoIndex = (indexUsuarioAtual + 1) % usuarios.length;
+            setIndexUsuarioAtual(proximoIndex);
+        } else setIndexUsuarioAtual(0);
+    }
 
     function calcularIdade(): number {
         const dataNascimento = new Date(usuarios[indexUsuarioAtual].datanascimento);
@@ -95,22 +99,26 @@ export default function List({ navigation }: Props) {
         return 0;
     }
 
+    function img() {
+        if (usuarios.length) {
+            const { imgperfil, nome, descricao } = usuarios[indexUsuarioAtual];
+            return (
+                <View {...panResponder.panHandlers}>
+                    <ListSwipableImage
+                        imageSource={`data:image/jpg;base64,${imgperfil}`}
+                        desc={`${nome}, ${calcularIdade()}, ${calcularDistancia()}`}
+                        bio={descricao}
+                    />
+                </View>
+            );
+        }
+        return <Text>Não há usuários</Text>
+    }
+
     return (
         <View style={styles.pagina}>
             <View style={styles.lista}>
-                {usuarios.length > 0 && (
-                    <View {...panResponder.panHandlers}>
-                        <ListSwipableImage
-                            imageSource={
-                                (usuarios[indexUsuarioAtual].imgperfil ?
-                                    `data:image/png;base64,${usuarios[indexUsuarioAtual].imgperfil}` :
-                                    require("../../assets/images/nav/profile.png"))
-                            }
-                            desc={`${usuarios[indexUsuarioAtual].nome}, ${calcularIdade()}, ${calcularDistancia()}`}
-                            bio={usuarios[indexUsuarioAtual].descricao}
-                        />
-                    </View>
-                )}
+                {img()}
             </View>
 
             <Nav
