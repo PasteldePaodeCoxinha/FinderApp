@@ -1,9 +1,10 @@
-import { Text, View } from "react-native";
-import Nav from "../../components/Nav";
+import React from 'react';
+import { Text, View } from 'react-native';
+import Nav from '../../components/Nav';
 
 interface Props {
     navigation: any;
-};
+}
 
 export default function ProfileBase({ navigation }: Props) {
     return (
@@ -11,7 +12,7 @@ export default function ProfileBase({ navigation }: Props) {
             <Text>Profile</Text>
             <Nav
                 navigation={navigation}
-            ></Nav>
+             />
         </View>
-    )
+    );
 }

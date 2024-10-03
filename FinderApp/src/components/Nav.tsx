@@ -42,8 +42,7 @@ export default function Nav({ navigation }: Props) {
             ></NavButton>
             <NavButton
                 image={require("../../assets/images/nav/profile.png")}
-                callback={() => navigation.navigate("List")}
-                // callback={() => navigation.navigate("Profile")}
+                callback={() => navigation.navigate("Profile")}
             ></NavButton>
         </View>
     )
