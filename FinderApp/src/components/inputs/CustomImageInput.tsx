@@ -11,6 +11,7 @@ export default function CustomImageInput(props: Props) {
     const { theme } = useTheme();
     const [isFocused, setIsFocused] = useState<boolean>(false);
     const [imageB64, setImageB64] = useState<string>("");
+    const [fileType, setFileType] = useState<string>("");
 
     const styles = StyleSheet.create({
         image: {
@@ -36,9 +37,12 @@ export default function CustomImageInput(props: Props) {
 
         launchImageLibrary(options, (response) => {
             if (response.assets && response.assets.length > 0) {
+                const fileName = response.assets[0].fileName;
+                const fileType = fileName?.match(/\.[0-9a-zA-Z]+$/i);
                 const base64 = response.assets[0].base64;
-                if (base64 != undefined) {
+                if (base64 && fileType) {
                     setImageB64(base64);
+                    setFileType(fileType[0]);
                     props.setImage(base64);
                 }
             }
@@ -57,7 +61,7 @@ export default function CustomImageInput(props: Props) {
                     style={styles.image}
                     source={
                         imageB64 ? ({
-                            uri: `data:image/jpeg;base64,${imageB64}`
+                            uri: `data:image/${fileType};base64,${imageB64}`
                         }) : require("../../../assets/images/nav/profile.png")
                     }
                 />
