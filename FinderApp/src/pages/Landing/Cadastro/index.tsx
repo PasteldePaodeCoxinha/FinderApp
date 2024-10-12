@@ -3,6 +3,7 @@ import EmailSenha from "./EmailSenha";
 import Basico from "./Basico";
 import GostosInteresses from "./GostosInteresses";
 import Bio from "./Bio";
+import { Alert } from "react-native";
 
 interface Props {
     navigation: any;
@@ -50,11 +51,11 @@ export default function Cadastro({ navigation }: Props) {
         });
 
         const data = await response.json();
-        if (response.status == 200) {
+        if (response.ok) {
             setUsuarioId(data.id);
             setEtapa("GostosInteresses");
         } else {
-            console.log("Falha:", data);
+            Alert.alert("Falha ao cadastrar:", data.msg);
         }
     }
 
@@ -73,10 +74,10 @@ export default function Cadastro({ navigation }: Props) {
         });
 
         const data = await response.json();
-        if (response.status == 200) {
+        if (response.ok) {
             setEtapa("CadastroBio");
         } else {
-            console.log("Falha cadastrando usuário:", data);
+            Alert.alert("Falha cadastrando usuário:", data.msg);
         }
     }
 
@@ -93,15 +94,14 @@ export default function Cadastro({ navigation }: Props) {
         });
 
         const data = await response.json();
-        if (response.status == 200) {
+        if (response.ok) {
             navigation.navigate("List");
         } else {
-            console.log("Falha cadastrando usuário:", data);
+            Alert.alert("Falha cadastrando usuário:", data.msg);
         }
     }
 
     function proximaEtapa() {
-        console.log(etapa);
         switch (etapa) {
             case "EmailSenha":
                 setEtapa("CadastroBasico");
