@@ -99,7 +99,7 @@ export default function List({ navigation }: Props) {
 
     async function checaMatch(usuario: Usuario) {
         const idUsuarioAtual = await AsyncStorage.getItem("idUsuario");
-        const response = await fetch(`https://finder-app-back.vercel.app/curtir/match?curtiu=${idUsuarioAtual}&curtido=${usuario.id}`);
+        const response = await fetch(`https://finder-app-back.vercel.app/curtir/match?curtiu=${usuario.id}&curtido=${idUsuarioAtual}`);
 
         console.log(await response.json());
 
