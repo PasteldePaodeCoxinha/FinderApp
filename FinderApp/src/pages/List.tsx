@@ -84,7 +84,7 @@ export default function List({ navigation }: Props) {
             const response = await fetch("https://finder-app-back.vercel.app/usuario/lista");
 
             const data = await response.json();
-            if (response.status == 200) {
+            if (response.ok) {
                 const proprioId = await AsyncStorage.getItem("idUsuario");
                 if (proprioId) {
                     setUsuarios(data.usuarios.filter((u: any) => u.id != parseInt(proprioId)));
@@ -97,17 +97,52 @@ export default function List({ navigation }: Props) {
         getUsuarios();
     }, []);
 
-    function proximoUsuario(direction: "left" | "right") {
+    async function checaMatch(usuario: Usuario) {
+        const idUsuarioAtual = await AsyncStorage.getItem("idUsuario");
+        const response = await fetch(`https://finder-app-back.vercel.app/curtir/match?curtiu=${idUsuarioAtual}&curtido=${usuario.id}`);
+
+        console.log(await response.json());
+
+        if (response.status == 200)
+            return true;
+
+        return false;
+    }
+
+    async function proximoUsuario(direction: "left" | "right") {
+        let sucesso: boolean = true;
         switch (direction) {
             case "left":
-                Alert.alert("Passou");
+                // Alert.alert("Passou");
                 break;
             case "right":
-                Alert.alert("Curtiu");
+                // Alert.alert("Curtiu");
+
+                const idUsuarioAtual = await AsyncStorage.getItem("idUsuario");
+                const response = await fetch("https://finder-app-back.vercel.app/curtir/cadastro", {
+                    method: "POST",
+                    headers: {
+                        "Accept": "application/json",
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        "curtiu": idUsuarioAtual,
+                        "curtido": usuarios[0].id
+                    })
+                });
+                if (!response.ok) {
+                    sucesso = false;
+                }
+
+                if (await checaMatch(usuarios[0])) {
+                    Alert.alert("Match!");
+                }
+
+                console.log(await response.json())
                 break;
         }
 
-        setUsuarios(usuarios.filter((_, i) => i != 0));
+        if (sucesso) setUsuarios(usuarios.slice(1));
     }
 
     function calcularIdade(usuario: Usuario): number {
