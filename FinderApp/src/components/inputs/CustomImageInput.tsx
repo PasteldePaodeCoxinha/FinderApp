@@ -57,7 +57,7 @@ export default function CustomImageInput(props: Props) {
                     style={styles.image}
                     source={
                         imageB64 ? ({
-                            uri: `data:image/jpeg;base64,${imageB64}`
+                            uri: `data:image/jpg;base64,${imageB64}`
                         }) : require("../../../assets/images/nav/profile.png")
                     }
                 />

@@ -3,6 +3,7 @@ import EmailSenha from "./EmailSenha";
 import Basico from "./Basico";
 import GostosInteresses from "./GostosInteresses";
 import Bio from "./Bio";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 interface Props {
     navigation: any;
@@ -53,6 +54,7 @@ export default function Cadastro({ navigation }: Props) {
         if (response.status == 200) {
             setUsuarioId(data.id);
             setEtapa("GostosInteresses");
+            await AsyncStorage.setItem("idUsuario", data.id.toString());
         } else {
             console.log("Falha:", data);
         }
