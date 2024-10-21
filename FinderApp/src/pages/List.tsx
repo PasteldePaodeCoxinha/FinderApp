@@ -1,5 +1,5 @@
-import { StyleSheet, View, Text, PanResponder } from 'react-native';
-import { useEffect, useRef, useState } from "react";
+import { StyleSheet, View, Text, Alert, ImageBackground } from 'react-native';
+import { useEffect, useState } from "react";
 import Nav from "../components/Nav";
 import useTheme from "../hooks/UseTheme";
 import ListSwipableImage from "../components/ListSwipableImage";
@@ -24,7 +24,6 @@ interface Usuario {
 export default function List({ navigation }: Props) {
     const { theme } = useTheme();
     const [usuarios, setUsuarios] = useState<Array<Usuario>>([]);
-    const [indexUsuarioAtual, setIndexUsuarioAtual] = useState<number>(0);
 
     const styles = StyleSheet.create({
         pagina: {
@@ -32,12 +31,51 @@ export default function List({ navigation }: Props) {
             justifyContent: "space-between",
             height: "100%",
             width: "100%",
-            backgroundColor: theme.colors.background
+            backgroundColor: theme.colors.background,
+            paddingTop: 50,
         },
         lista: {
             flex: 1,
             justifyContent: 'center',
             alignItems: 'center',
+        },
+        backgroundImage: {
+            zIndex: -1,
+            width: 350,
+            height: 700,
+            position: "absolute",
+            top: 0,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "flex-end",
+            paddingVertical: 50,
+            gap: 10,
+            borderRadius: 15,
+        },
+        desc: {
+            // color: theme.colors.text,
+        },
+        descText: {
+            fontSize: 28,
+            textAlign: "center",
+            color: theme.colors.text,
+            textShadowColor: "white",
+            textShadowOffset: {
+                width: 0,
+                height: 0
+            },
+            textShadowRadius: 5,
+        },
+        bio: {
+            backgroundColor: theme.colors.border,
+            maxWidth: "90%",
+            borderRadius: 15,
+            padding: 10
+        },
+        bioText: {
+            fontSize: 24,
+            color: theme.colors.text,
         },
     });
 
@@ -46,44 +84,69 @@ export default function List({ navigation }: Props) {
             const response = await fetch("https://finder-app-back.vercel.app/usuario/lista");
 
             const data = await response.json();
-            if (response.status == 200) {
+            if (response.ok) {
                 const proprioId = await AsyncStorage.getItem("idUsuario");
                 if (proprioId) {
                     setUsuarios(data.usuarios.filter((u: any) => u.id != parseInt(proprioId)));
                 } else setUsuarios(data.usuarios);
             } else {
-                console.log("Falha buscando usuarios:", data);
+                Alert.alert("Falha buscando usuarios:", data.msg);
             }
         }
 
         getUsuarios();
     }, []);
 
-    const panResponder = PanResponder.create({
-        onMoveShouldSetPanResponder: (evt, gestureState) => {
-            return Math.abs(gestureState.dx) > 20;
-        },
-        onPanResponderEnd: (evt, gestureState) => {
-            if (gestureState.dx > 50) {
-                proximoUsuario();
-                console.log('Swiped Right');
-            } else if (gestureState.dx < -50) {
-                proximoUsuario();
-                console.log('Swiped Left');
-            }
-        },
-    });
+    async function checaMatch(usuario: Usuario) {
+        const idUsuarioAtual = await AsyncStorage.getItem("idUsuario");
+        const response = await fetch(`https://finder-app-back.vercel.app/curtir/match?curtiu=${usuario.id}&curtido=${idUsuarioAtual}`);
 
-    function proximoUsuario() {
-        console.log("proximoUsuario usuarios.length", usuarios.length);
-        if (usuarios.length > 1) {
-            const proximoIndex = (indexUsuarioAtual + 1) % usuarios.length;
-            setIndexUsuarioAtual(proximoIndex);
-        } else setIndexUsuarioAtual(0);
+        console.log(await response.json());
+
+        if (response.status == 200)
+            return true;
+
+        return false;
     }
 
-    function calcularIdade(): number {
-        const dataNascimento = new Date(usuarios[indexUsuarioAtual].datanascimento);
+    async function proximoUsuario(direction: "left" | "right") {
+        let sucesso: boolean = true;
+        switch (direction) {
+            case "left":
+                // Alert.alert("Passou");
+                break;
+            case "right":
+                // Alert.alert("Curtiu");
+
+                const idUsuarioAtual = await AsyncStorage.getItem("idUsuario");
+                const response = await fetch("https://finder-app-back.vercel.app/curtir/cadastro", {
+                    method: "POST",
+                    headers: {
+                        "Accept": "application/json",
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        "curtiu": idUsuarioAtual,
+                        "curtido": usuarios[0].id
+                    })
+                });
+                if (!response.ok) {
+                    sucesso = false;
+                }
+
+                if (await checaMatch(usuarios[0])) {
+                    Alert.alert("Match!");
+                }
+
+                console.log(await response.json())
+                break;
+        }
+
+        if (sucesso) setUsuarios(usuarios.slice(1));
+    }
+
+    function calcularIdade(usuario: Usuario): number {
+        const dataNascimento = new Date(usuario.datanascimento);
         const hoje = new Date();
 
         const idade = hoje.getFullYear() - dataNascimento.getFullYear();
@@ -95,21 +158,41 @@ export default function List({ navigation }: Props) {
         return idade;
     }
 
-    function calcularDistancia(): number {
+    function calcularDistancia(usuario: Usuario): number {
         return 0;
+    }
+
+    function imgBehind() {
+        if (usuarios.length > 1) {
+            const { imgperfil, nome, descricao } = usuarios[1];
+            return (
+                <ImageBackground
+                    style={styles.backgroundImage}
+                    source={{ uri: `data:image/jpg;base64,${imgperfil}` }}
+                >
+                    <View style={styles.desc}>
+                        <Text style={styles.descText}>{`${nome}, ${calcularIdade(usuarios[1])}, ${calcularDistancia(usuarios[1])}`}</Text>
+                        <View style={styles.bio}>
+                            <Text style={styles.bioText}>{descricao}</Text>
+                        </View>
+                    </View>
+                </ImageBackground>
+
+            );
+        }
+        return <Text>Não há usuários</Text>
     }
 
     function img() {
         if (usuarios.length) {
-            const { imgperfil, nome, descricao } = usuarios[indexUsuarioAtual];
+            const { imgperfil, nome, descricao } = usuarios[0];
             return (
-                <View {...panResponder.panHandlers}>
-                    <ListSwipableImage
-                        imageSource={`data:image/jpg;base64,${imgperfil}`}
-                        desc={`${nome}, ${calcularIdade()}, ${calcularDistancia()}`}
-                        bio={descricao}
-                    />
-                </View>
+                <ListSwipableImage
+                    onSwipe={proximoUsuario}
+                    imageSource={`data:image/jpg;base64,${imgperfil}`}
+                    desc={`${nome}, ${calcularIdade(usuarios[0])}, ${calcularDistancia(usuarios[0])}`}
+                    bio={descricao}
+                />
             );
         }
         return <Text>Não há usuários</Text>
@@ -118,6 +201,7 @@ export default function List({ navigation }: Props) {
     return (
         <View style={styles.pagina}>
             <View style={styles.lista}>
+                {imgBehind()}
                 {img()}
             </View>
 

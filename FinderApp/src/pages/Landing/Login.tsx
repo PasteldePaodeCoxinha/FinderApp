@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import useTheme from "../../hooks/UseTheme";
 import CustomTextInput from "../../components/inputs/CustomTextInput";
@@ -59,15 +59,15 @@ export default function Login({ navigation }: Props) {
         const response = await fetch(`https://finder-app-back.vercel.app/usuario/login?email=${email}&senha=${senha}`);
 
         const data = await response.json();
-        if (response.status == 200) {
+        if (response.ok) {
             try {
                 await AsyncStorage.setItem("idUsuario", data.idUsuario.toString());
                 navigation.navigate("List");
             } catch (error) {
-                console.error("Falha ao fazer login", error);
+                Alert.alert("Falha ao fazer login", error as any);
             }
         } else {
-            console.log("Falha ao fazer login:", data);
+            Alert.alert("Falha ao fazer login:", data.msg);
         }
     }
 

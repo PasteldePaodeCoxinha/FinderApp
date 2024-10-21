@@ -1,19 +1,32 @@
-import { ImageBackground, StyleSheet, Text, View } from "react-native";
+import { ImageBackground, Animated, StyleSheet, Text, View, Dimensions } from "react-native";
+import { GestureHandlerRootView, PanGestureHandler, PanGestureHandlerGestureEvent, State } from "react-native-gesture-handler";
 import useTheme from "../hooks/UseTheme";
+
+const { width } = Dimensions.get("window");
 
 interface Props {
     imageSource: any;
     desc: string;
     bio: string;
+    onSwipe: (direction: "left" | "right") => void;
 };
 
 export default function ListSwipableImage(props: Props) {
     const { theme } = useTheme();
 
+    const cardWidth = 350;
+    const cardHeight = 700;
+
     const styles = StyleSheet.create({
+        card: {
+            width: cardWidth,
+            height: cardHeight,
+            justifyContent: "center",
+            alignItems: "center",
+        },
         backgroundImage: {
-            width: 350,
-            height: 700,
+            width: cardWidth,
+            height: cardHeight,
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
@@ -48,17 +61,80 @@ export default function ListSwipableImage(props: Props) {
         },
     });
 
+    const translateX = new Animated.Value(0);
+    const translateY = new Animated.Value(0);
+
+    const onGestureEvent = Animated.event<PanGestureHandlerGestureEvent>(
+        [{ nativeEvent: { translationX: translateX, translationY: translateY } }],
+        { useNativeDriver: true }
+    );
+
+    const onHandlerStateChange = ({ nativeEvent }: { nativeEvent: { state: number; translationX: number } }) => {
+        if (nativeEvent.state === State.END) {
+            const threshold = width / 2;
+
+            if (nativeEvent.translationX > threshold) {
+                // Swiped right
+                Animated.timing(translateX, {
+                    toValue: width,
+                    duration: 300,
+                    useNativeDriver: true,
+                }).start(() => props.onSwipe("right"));
+            } else if (nativeEvent.translationX < -threshold) {
+                // Swiped left
+                Animated.timing(translateX, {
+                    toValue: -width,
+                    duration: 300,
+                    useNativeDriver: true,
+                }).start(() => props.onSwipe("left"));
+            } else {
+                // Reset position
+                Animated.spring(translateX, {
+                    toValue: 0,
+                    friction: 5,
+                    tension: 0,
+                    useNativeDriver: true,
+                }).start();
+                Animated.spring(translateY, {
+                    toValue: 0,
+                    friction: 5,
+                    tension: 0,
+                    useNativeDriver: true,
+                }).start();
+            }
+        }
+    };
+
     return (
-        <ImageBackground
-            style={styles.backgroundImage}
-            source={{ uri: props.imageSource }}
-        >
-            <View style={styles.desc}>
-                <Text style={styles.descText}>{props.desc}</Text>
-                <View style={styles.bio}>
-                    <Text style={styles.bioText}>{props.bio}</Text>
-                </View>
-            </View>
-        </ImageBackground>
-    )
+        <GestureHandlerRootView>
+            <PanGestureHandler
+                onGestureEvent={onGestureEvent}
+                onHandlerStateChange={onHandlerStateChange}
+            >
+                <Animated.View
+                    style={[
+                        styles.card,
+                        {
+                            transform: [
+                                { translateX },
+                                { translateY },
+                            ],
+                        },
+                    ]}
+                >
+                    <ImageBackground
+                        style={styles.backgroundImage}
+                        source={{ uri: props.imageSource }}
+                    >
+                        <View style={styles.desc}>
+                            <Text style={styles.descText}>{props.desc}</Text>
+                            <View style={styles.bio}>
+                                <Text style={styles.bioText}>{props.bio}</Text>
+                            </View>
+                        </View>
+                    </ImageBackground>
+                </Animated.View>
+            </PanGestureHandler>
+        </GestureHandlerRootView>
+    );
 }
