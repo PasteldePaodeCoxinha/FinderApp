@@ -43,7 +43,7 @@ export default function CustomImageInput(props: Props) {
                 if (base64 && fileType) {
                     setImageB64(base64);
                     setFileType(fileType[0]);
-                    props.setImage(base64);
+                    props.setImage(`data:image/${fileType};base64,${base64}`);
                 }
             }
         });

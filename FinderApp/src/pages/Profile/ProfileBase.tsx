@@ -85,7 +85,7 @@ export default function ProfileBase({ navigation }: Props) {
     return (
         <View style={styles.pagina}>
             <View style={styles.informacoesBasi}>
-                <CustomImageInput setImage={setImg}/>
+                <CustomImageInput setImage={setImg} defaultImage={img}/>
                 <Text style={styles.textoInfo}>{nome}, {idade}</Text>
             </View>
 
@@ -100,8 +100,7 @@ export default function ProfileBase({ navigation }: Props) {
 
             <View>
                 <CustomTextBoxInput
-                    setText={setDesc}
-                    placeholder={desc}
+                    setText={() => setDesc}
                 />
             </View>
 
