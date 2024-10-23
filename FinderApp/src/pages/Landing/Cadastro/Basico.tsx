@@ -1,10 +1,11 @@
-import { StyleSheet, Text, View } from "react-native";
-import CustomImageInput from "../../../components/inputs/CustomImageInput";
-import useTheme from "../../../hooks/UseTheme";
-import CustomButton from "../../../components/inputs/CustomButton";
-import CustomTextInput from "../../../components/inputs/CustomTextInput";
-import CustomDateInput from "../../../components/inputs/CustomDateInput";
-import CustomLocationInput from "../../../components/inputs/CustomLocationInput";
+import React from 'react';
+import { StyleSheet, Text, View } from 'react-native';
+import CustomImageInput from '../../../components/inputs/CustomImageInput';
+import useTheme from '../../../hooks/UseTheme';
+import CustomButton from '../../../components/inputs/CustomButton';
+import CustomTextInput from '../../../components/inputs/CustomTextInput';
+import CustomDateInput from '../../../components/inputs/CustomDateInput';
+import CustomLocationInput from '../../../components/inputs/CustomLocationInput';
 
 interface Props {
     propSetImg: React.Dispatch<React.SetStateAction<string>>;
@@ -13,39 +14,39 @@ interface Props {
     propSetProfissao: React.Dispatch<React.SetStateAction<string>>;
     propSetEscolaridade: React.Dispatch<React.SetStateAction<string>>;
     continuar: () => void;
-};
+}
 
 export default function Basico(props: Props) {
     const { theme } = useTheme();
 
     const styles = StyleSheet.create({
         pagina: {
-            display: "flex",
-            justifyContent: "space-between",
-            height: "100%",
+            display: 'flex',
+            justifyContent: 'space-between',
+            height: '100%',
             paddingBottom: 75,
             paddingHorizontal: 50,
             backgroundColor: theme.colors.background,
         },
         titulo: {
-            margin: "auto",
+            margin: 'auto',
             fontSize: 32,
-            color: theme.colors.text
+            color: theme.colors.text,
         },
         inputs: {
-            display: "flex",
+            display: 'flex',
             gap: 5,
-            flexDirection: "column",
-            alignItems: "center",
-            margin: "auto",
-            maxWidth: "80%"
+            flexDirection: 'column',
+            alignItems: 'center',
+            margin: 'auto',
+            maxWidth: '80%',
         },
         btnContinuar: {
             backgroundColor: theme.colors.primary,
-            margin: "auto",
+            margin: 'auto',
             paddingHorizontal: 20,
             paddingVertical: 5,
-            textAlign: "center",
+            textAlign: 'center',
             borderTopLeftRadius: 25,
             borderTopRightRadius: 35,
             borderBottomLeftRadius: 35,
@@ -53,13 +54,13 @@ export default function Basico(props: Props) {
         },
         btnTexto: {
             color: theme.colors.text,
-            fontSize: 24
+            fontSize: 24,
         },
         nascimentoLocalizacao: {
-            display: "flex",
+            display: 'flex',
             gap: 5,
-            flexDirection: "row"
-        }
+            flexDirection: 'row',
+        },
     });
 
     function Continuar() {
