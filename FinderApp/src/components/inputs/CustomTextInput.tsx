@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
-import { StyleSheet, Text, TextInput, View } from "react-native";
-import useTheme from "../../hooks/UseTheme";
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, Text, TextInput, View } from 'react-native';
+import useTheme from '../../hooks/UseTheme';
 
 interface Props {
     setText: (text: string) => void;
@@ -8,7 +8,7 @@ interface Props {
     secure?: boolean;
     obrigatorio?: boolean;
     errMsg?: string;
-};
+}
 
 export default function CustomTextInput(props: Props) {
     const { theme } = useTheme();
@@ -28,31 +28,31 @@ export default function CustomTextInput(props: Props) {
             if (touched && props.errMsg) {
                 setErroMsg(props.errMsg);
             } else if (touched && !text) {
-                setErroMsg("Preencha o campo");
+                setErroMsg('Preencha o campo');
             } else {
-                setErroMsg("");
+                setErroMsg('');
             }
         }, [text, isFocused]);
     }
 
     const styles = StyleSheet.create({
         view: {
-            display: "flex",
-            alignItems: "center"
+            display: 'flex',
+            alignItems: 'center',
         },
         input: {
             height: 40,
-            minWidth: "100%",
+            minWidth: '100%',
             borderColor: (isFocused ? theme.colors.primary : theme.colors.border),
             borderWidth: (isFocused ? 3 : 2),
             borderRadius: 15,
             paddingHorizontal: 10,
-            backgroundColor: "white",
-            color: theme.colors.text
+            backgroundColor: 'white',
+            color: theme.colors.text,
         },
         textoErr: {
-            color: theme.colors.primary
-        }
+            color: theme.colors.primary,
+        },
     });
 
     return (

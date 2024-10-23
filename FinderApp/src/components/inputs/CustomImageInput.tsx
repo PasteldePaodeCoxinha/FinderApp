@@ -1,17 +1,18 @@
-import { useState } from "react";
-import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
+import React, { useState } from 'react';
+import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { launchImageLibrary, MediaType } from 'react-native-image-picker';
-import useTheme from "../../hooks/UseTheme";
+import useTheme from '../../hooks/UseTheme';
 
 interface Props {
     setImage: (b64: string) => void;
-};
+    defaultImage?: string;
+}
 
 export default function CustomImageInput(props: Props) {
     const { theme } = useTheme();
     const [isFocused, setIsFocused] = useState<boolean>(false);
-    const [imageB64, setImageB64] = useState<string>("");
-    const [fileType, setFileType] = useState<string>("");
+    const [imageB64, setImageB64] = useState<string>('');
+    const [fileType, setFileType] = useState<string>('');
 
     const styles = StyleSheet.create({
         image: {
@@ -23,16 +24,16 @@ export default function CustomImageInput(props: Props) {
             borderWidth: 3,
             borderColor: theme.colors.border,
             padding: 10,
-            margin: "auto",
-            width: "100%"
+            margin: 'auto',
+            width: '100%',
         },
     });
 
     function selectImage() {
         const options = {
             selectionLimit: 1,
-            mediaType: "photo" as MediaType,
-            includeBase64: true
+            mediaType: 'photo' as MediaType,
+            includeBase64: true,
         };
 
         launchImageLibrary(options, (response) => {
@@ -47,7 +48,20 @@ export default function CustomImageInput(props: Props) {
                 }
             }
         });
-    };
+    }
+
+    function img() {
+        if (imageB64) {
+            return ({
+                uri: `data:image/${fileType};base64,${imageB64}`,
+            });
+        } else if (props.defaultImage) {
+            return ({
+                uri: props.defaultImage,
+            });
+        }
+        return require('../../../assets/images/nav/profile.png');
+    }
 
     return (
         <View>
