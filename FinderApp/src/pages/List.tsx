@@ -79,29 +79,27 @@ export default function List({ navigation }: Props) {
         },
     });
 
-    useEffect(() => {
-        async function getUsuarios() {
-            const response = await fetch("https://finder-app-back.vercel.app/usuario/lista");
+    async function getUsuarios() {
+        const response = await fetch("https://finder-app-back.vercel.app/usuario/lista");
 
-            const data = await response.json();
-            if (response.ok) {
-                const proprioId = await AsyncStorage.getItem("idUsuario");
-                if (proprioId) {
-                    setUsuarios(data.usuarios.filter((u: any) => u.id != parseInt(proprioId)));
-                } else setUsuarios(data.usuarios);
-            } else {
-                Alert.alert("Falha buscando usuarios:", data.msg);
-            }
+        const data = await response.json();
+        if (response.ok) {
+            const proprioId = await AsyncStorage.getItem("idUsuario");
+            if (proprioId) {
+                setUsuarios(data.usuarios.filter((u: any) => u.id != parseInt(proprioId)));
+            } else setUsuarios(data.usuarios);
+        } else {
+            Alert.alert("Falha buscando usuarios:", data.msg);
         }
+    }
 
+    useEffect(() => {
         getUsuarios();
     }, []);
 
     async function checaMatch(usuario: Usuario) {
         const idUsuarioAtual = await AsyncStorage.getItem("idUsuario");
         const response = await fetch(`https://finder-app-back.vercel.app/curtir/match?curtiu=${usuario.id}&curtido=${idUsuarioAtual}`);
-
-        console.log(await response.json());
 
         if (response.status == 200)
             return true;
@@ -137,8 +135,6 @@ export default function List({ navigation }: Props) {
                 if (await checaMatch(usuarios[0])) {
                     Alert.alert("Match!");
                 }
-
-                console.log(await response.json())
                 break;
         }
 
@@ -168,7 +164,7 @@ export default function List({ navigation }: Props) {
             return (
                 <ImageBackground
                     style={styles.backgroundImage}
-                    source={{ uri: `data:image/jpg;base64,${imgperfil}` }}
+                    source={{ uri: imgperfil }}
                 >
                     <View style={styles.desc}>
                         <Text style={styles.descText}>{`${nome}, ${calcularIdade(usuarios[1])}, ${calcularDistancia(usuarios[1])}`}</Text>
@@ -180,7 +176,11 @@ export default function List({ navigation }: Props) {
 
             );
         }
-        return <Text>Não há usuários</Text>
+
+        getUsuarios();
+        if (usuarios.length > 1)
+            return imgBehind();
+        return <View></View>;
     }
 
     function img() {
@@ -189,7 +189,7 @@ export default function List({ navigation }: Props) {
             return (
                 <ListSwipableImage
                     onSwipe={proximoUsuario}
-                    imageSource={`data:image/jpg;base64,${imgperfil}`}
+                    imageSource={imgperfil}
                     desc={`${nome}, ${calcularIdade(usuarios[0])}, ${calcularDistancia(usuarios[0])}`}
                     bio={descricao}
                 />
