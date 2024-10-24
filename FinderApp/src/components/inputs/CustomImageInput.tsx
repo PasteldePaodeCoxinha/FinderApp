@@ -75,8 +75,8 @@ export default function CustomImageInput(props: Props) {
                     style={styles.image}
                     source={
                         imageB64 ? ({
-                            uri: `data:image/${fileType};base64,${imageB64}`
-                        }) : require("../../../assets/images/nav/profile.png")
+                            uri: `data:image/${fileType};base64,${imageB64}`,
+                        }) : require('../../../assets/images/nav/profile.png')
                     }
                 />
             </TouchableOpacity>

@@ -67,7 +67,7 @@ export default function ProfileBase({ navigation }: Props) {
                 } else {
                     Alert.alert('Falha ao atualizar a descrição: ', data.msg);
                 }
-            }, 5000);
+            }, 500);
         };
         atualizarDesc();
     }, [desc, usuarioId]);
