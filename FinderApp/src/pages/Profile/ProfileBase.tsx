@@ -11,6 +11,7 @@ interface Props {
 }
 
 export default function ProfileBase({ navigation }: Props) {
+    const [usuarioId, setUsuarioId] = useState<number>(0);
     const [nome, setNome] = useState<string>('');
     const [idade, setIdade] = useState<number>(0);
     const [img, setImg] = useState<string>('');
@@ -18,12 +19,16 @@ export default function ProfileBase({ navigation }: Props) {
     const { theme } = useTheme();
 
     const getUsuario = async() => {
-        const idUsuario = await AsyncStorage.getItem('idUsuario');
+        let idUsuario = await AsyncStorage.getItem('idUsuario');
+        if (idUsuario === null) {
+            idUsuario = '40';
+        }
         const response = await fetch(`https://finder-app-back.vercel.app/usuario/getUmUsuario?id=${idUsuario}`);
         const data = await response.json();
         if (response.status === 200) {
             const usuario = data.Usuario;
 
+            setUsuarioId(usuario.id);
             setNome(usuario.nome);
 
             let timeDiff = Math.abs(Date.now() - (new Date(usuario.datanascimento)).getTime());
@@ -39,7 +44,37 @@ export default function ProfileBase({ navigation }: Props) {
 
     useEffect(() => {
         getUsuario();
-    });
+    },[]);
+
+    useEffect(() => {
+        const atualizarDesc = () => {
+            setTimeout(async() => {
+                const response = await fetch('https://finder-app-back.vercel.app/usuario/editar', {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        'id': usuarioId,
+                        'descricao': desc,
+                    }),
+                });
+
+                const data = await response.json();
+                if (response.ok) {
+                    console.log('Descrição atualizado');
+                } else {
+                    Alert.alert('Falha ao atualizar a descrição: ', data.msg);
+                }
+            }, 5000);
+        };
+        atualizarDesc();
+    }, [desc, usuarioId]);
+
+    useEffect(() => {
+        console.log(desc);
+    }, [desc]);
 
     const styles = StyleSheet.create({
         pagina: {
@@ -80,7 +115,7 @@ export default function ProfileBase({ navigation }: Props) {
         textoInfo: {
             fontSize: 24,
             color: '#1E1E1E',
-        }
+        },
     });
     return (
         <View style={styles.pagina}>
@@ -100,7 +135,7 @@ export default function ProfileBase({ navigation }: Props) {
 
             <View>
                 <CustomTextBoxInput
-                    setText={() => setDesc}
+                    setText={setDesc}
                 />
             </View>
 

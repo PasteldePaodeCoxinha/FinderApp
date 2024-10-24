@@ -91,6 +91,7 @@ export default function Cadastro({ navigation }: Props) {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
+                'id': usuarioId,
                 'descricao': descricao,
             }),
         });
