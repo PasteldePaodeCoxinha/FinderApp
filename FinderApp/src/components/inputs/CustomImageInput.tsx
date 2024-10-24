@@ -6,7 +6,7 @@ import useTheme from '../../hooks/UseTheme';
 interface Props {
     setImage: (b64: string) => void;
     defaultImage?: string;
-}
+};
 
 export default function CustomImageInput(props: Props) {
     const { theme } = useTheme();
@@ -48,19 +48,19 @@ export default function CustomImageInput(props: Props) {
                 }
             }
         });
-    }
+    };
 
     function img() {
         if (imageB64) {
             return ({
-                uri: `data:image/${fileType};base64,${imageB64}`,
+                uri: `data:image/${fileType};base64,${imageB64}`
             });
         } else if (props.defaultImage) {
             return ({
-                uri: props.defaultImage,
+                uri: props.defaultImage
             });
         }
-        return require('../../../assets/images/nav/profile.png');
+        return require("../../../assets/images/nav/profile.png");
     }
 
     return (
@@ -73,11 +73,7 @@ export default function CustomImageInput(props: Props) {
             >
                 <Image
                     style={styles.image}
-                    source={
-                        imageB64 ? ({
-                            uri: `data:image/${fileType};base64,${imageB64}`,
-                        }) : require('../../../assets/images/nav/profile.png')
-                    }
+                    source={img()}
                 />
             </TouchableOpacity>
         </View>
