@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from "react-native";
+import { Alert, StyleSheet, Text, View } from "react-native";
 import CustomButton from "../../../components/inputs/CustomButton";
 import CustomOptionsInput from "../../../components/inputs/CustomOptionsInput";
 import { useEffect, useState } from "react";
@@ -67,20 +67,20 @@ export default function GostosInteresses(props: Props) {
             const response = await fetch("https://finder-app-back.vercel.app/gosto/lista");
 
             const data = await response.json();
-            if (response.status == 200) {
+            if (response.ok) {
                 setGostos(data.gostos);
             } else {
-                console.log("Falha buscando gostos:", data);
+                Alert.alert("Falha buscando gostos:", data.msg);
             }
         }
         async function getInteresses() {
             const response = await fetch("https://finder-app-back.vercel.app/interesse/lista");
 
             const data = await response.json();
-            if (response.status == 200) {
+            if (response.ok) {
                 setInteresses(data.interesses);
             } else {
-                console.log("Falha buscando interesses:", data);
+                Alert.alert("Falha buscando interesses:", data.msg);
             }
         }
 
@@ -117,6 +117,7 @@ export default function GostosInteresses(props: Props) {
 
             <CustomButton
                 onPress={Continuar}
+                text="Continue"
             />
         </View>
     );

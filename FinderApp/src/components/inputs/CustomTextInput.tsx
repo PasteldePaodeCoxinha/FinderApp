@@ -7,15 +7,18 @@ interface Props {
     placeholder?: string;
     secure?: boolean;
     obrigatorio?: boolean;
+    limpar?: boolean;
     errMsg?: string;
+    style?: any;
+    value?: string;
 };
 
 export default function CustomTextInput(props: Props) {
     const { theme } = useTheme();
     const [touched, setTouched] = useState<boolean>(false);
     const [isFocused, setIsFocused] = useState<boolean>(false);
+    const [text, setText] = useState<string>("");
     const [erroMsg, setErroMsg] = useState<string>();
-    const [text, setText] = useState<string>();
 
     if (props.obrigatorio) {
         useEffect(() => {
@@ -27,12 +30,12 @@ export default function CustomTextInput(props: Props) {
         useEffect(() => {
             if (touched && props.errMsg) {
                 setErroMsg(props.errMsg);
-            } else if (touched && !text) {
+            } else if (touched && !(props.value ? props.value : text)) {
                 setErroMsg("Preencha o campo");
             } else {
                 setErroMsg("");
             }
-        }, [text, isFocused]);
+        }, [(props.value ? props.value : text), isFocused]);
     }
 
     const styles = StyleSheet.create({
@@ -56,14 +59,15 @@ export default function CustomTextInput(props: Props) {
     });
 
     return (
-        <View style={styles.view}>
+        <View style={[styles.view, props.style]}>
             <TextInput
                 style={styles.input}
                 placeholder={props.placeholder}
-                onChangeText={(txt: string) => { setText(txt); props.setText(txt); }}
+                onChangeText={(txt: string) => { setText(txt); props.setText(txt) }}
                 secureTextEntry={props.secure}
                 onFocus={() => setIsFocused(true)}
                 onBlur={() => setIsFocused(false)}
+                value={(props.value ? props.value : text)}
             />
             {erroMsg && <Text style={styles.textoErr}>{erroMsg}</Text>}
         </View>

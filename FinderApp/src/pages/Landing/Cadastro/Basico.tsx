@@ -98,6 +98,7 @@ export default function Basico(props: Props) {
 
             <CustomButton
                 onPress={Continuar}
+                text="Continue"
             />
         </View>
     );
