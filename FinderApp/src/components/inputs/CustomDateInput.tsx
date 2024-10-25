@@ -48,7 +48,7 @@ export default function CustomDateInput(props: Props) {
         const currentDate = selectedDate || date;
         setShow(false);
         setDate(currentDate);
-        if (currentDate) {props.setDate(currentDate);}
+        if (currentDate) { props.setDate(currentDate); }
     }
 
     return (
@@ -76,6 +76,7 @@ export default function CustomDateInput(props: Props) {
                     mode="date"
                     is24Hour={true}
                     onChange={onChange}
+                    maximumDate={new Date(new Date().getFullYear() - 18, new Date().getMonth(), new Date().getDate())}
                 />
             )}
         </View>

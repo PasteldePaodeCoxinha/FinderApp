@@ -134,7 +134,7 @@ export default function ProfileBase({ navigation }: Props) {
             </View>
 
             <View style={styles.containerBotoesAcoes}>
-                <TouchableOpacity style={styles.touchBotaoAcoes} onPress={() => { }}>
+                <TouchableOpacity style={styles.touchBotaoAcoes} onPress={() => { navigation.navigate('EdicaoProfile'); }}>
                     <Image
                         style={styles.botoesAcoes}
                         source={require('../../../assets/images/perfil/lapisedicao.png')}
