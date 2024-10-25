@@ -1,5 +1,3 @@
-import { StyleSheet } from "react-native";
-
 export interface ThemeContextProps {
     theme: ThemeProps;
     setTheme: React.Dispatch<React.SetStateAction<ThemeProps>>;
@@ -12,5 +10,6 @@ export interface ThemeProps {
         secondary: string;
         text: string;
         border: string;
+        msgBG: string;
     }
 }

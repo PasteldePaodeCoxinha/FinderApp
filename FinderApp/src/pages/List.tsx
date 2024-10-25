@@ -173,7 +173,6 @@ export default function List({ navigation }: Props) {
                         </View>
                     </View>
                 </ImageBackground>
-
             );
         }
 

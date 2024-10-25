@@ -10,7 +10,8 @@ export function ThemeProvider({ children }: any) {
             primary: "#F05050",
             secondary: "#F05050",
             text: "#1E1E1E",
-            border: "#DDD9D9"
+            border: "#DDD9D9",
+            msgBG: "#F0B0B0"
         }
     } as ThemeProps);
     

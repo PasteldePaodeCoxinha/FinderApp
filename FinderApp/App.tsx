@@ -3,11 +3,11 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Profile from './src/pages/Profile';
 import Search from './src/pages/Search';
-import Matches from './src/pages/Matches';
 import List from './src/pages/List';
-import Chat from './src/pages/Chat';
 import { ThemeProvider } from './src/contexts/ThemeContext';
 import Landing from './src/pages/Landing';
+import ListaChat from './src/pages/Chat';
+import Chat from './src/pages/Chat/Chat';
 
 const Stack = createNativeStackNavigator();
 
@@ -28,7 +28,7 @@ function App(): React.JSX.Element {
           />
           <Stack.Screen
             name="Matches"
-            component={Matches}
+            component={ListaChat}
             options={{ headerShown: false }}
           />
           <Stack.Screen
