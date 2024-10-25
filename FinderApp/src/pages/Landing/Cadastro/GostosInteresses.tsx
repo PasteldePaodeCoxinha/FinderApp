@@ -118,6 +118,7 @@ export default function GostosInteresses(props: Props) {
 
             <CustomButton
                 onPress={Continuar}
+                text="Continue"
             />
         </View>
     );

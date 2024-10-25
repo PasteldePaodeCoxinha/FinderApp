@@ -4,8 +4,8 @@ import useTheme from '../../hooks/UseTheme';
 
 interface Props {
     onPress: () => void;
-
-}
+    text: string;
+};
 
 export default function CustomButton(props: Props) {
     const { theme } = useTheme();
@@ -33,7 +33,7 @@ export default function CustomButton(props: Props) {
             style={styles.btnContinuar}
             onPress={props.onPress}
         >
-            <Text style={styles.btnTexto}>Continue</Text>
+            <Text style={styles.btnTexto}>{props.text}</Text>
         </TouchableOpacity>
     );
 }

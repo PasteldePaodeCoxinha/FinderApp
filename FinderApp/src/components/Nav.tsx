@@ -23,24 +23,21 @@ export default function Nav({ navigation }: Props) {
             style={styles.nav}
         >
             <NavButton
-                image={require('../../assets/images/nav/search.png')}
-                callback={() => navigation.navigate('List')}
-                // callback={() => navigation.navigate('Search')}
-            />
+                image={require("../../assets/images/nav/search.png")}
+                callback={() => navigation.navigate("Search")}
+            ></NavButton>
             <NavButton
-                image={require('../../assets/images/nav/matches.png')}
-                callback={() => navigation.navigate('List')}
-                // callback={() => navigation.navigate('Matches')}
-            />
+                image={require("../../assets/images/nav/matches.png")}
+                callback={() => navigation.navigate("Matches")}
+            ></NavButton>
             <NavButton
                 image={require('../../assets/images/nav/list.png')}
                 callback={() => navigation.navigate('List')}
             />
             <NavButton
-                image={require('../../assets/images/nav/chat.png')}
-                callback={() => navigation.navigate('List')}
-                // callback={() => navigation.navigate('Chat')}
-            />
+                image={require("../../assets/images/nav/chat.png")}
+                callback={() => navigation.navigate("Chat")}
+            ></NavButton>
             <NavButton
                 image={require('../../assets/images/nav/profile.png')}
                 callback={() => navigation.navigate('Profile')}
