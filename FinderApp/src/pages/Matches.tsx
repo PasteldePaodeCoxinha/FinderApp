@@ -6,13 +6,13 @@ interface Props {
     navigation: any;
 }
 
-export default function Search({ navigation }: Props) {
+export default function Matches({ navigation }: Props) {
     return (
         <View>
-            <Text>Search</Text>
+            <Text>Matches</Text>
             <Nav navigation={navigation}/>
             <Button
-                title="Login"
+            title="Login"
                 onPress={() => navigation.navigate('Landing')}
             />
         </View>

@@ -6,10 +6,10 @@ interface Props {
     navigation: any;
 }
 
-export default function Search({ navigation }: Props) {
+export default function Chat({ navigation }: Props) {
     return (
         <View>
-            <Text>Search</Text>
+            <Text>Chat</Text>
             <Nav navigation={navigation}/>
             <Button
                 title="Login"

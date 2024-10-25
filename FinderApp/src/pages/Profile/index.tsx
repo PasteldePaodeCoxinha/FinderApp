@@ -1,6 +1,7 @@
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import ProfileBase from './ProfileBase';
+import EdicaoProfile from './EdicaoProfile';
 
 const Stack = createNativeStackNavigator();
 
@@ -12,16 +13,11 @@ export default function Profile() {
                 component={ProfileBase}
                 options={{ headerShown: false }}
             />
-            {/* <Stack.Screen
-                name="CadastroGostosInteresses"
-                component={GostosInteresses}
+            <Stack.Screen
+                name="EdicaoProfile"
+                component={EdicaoProfile}
                 options={{ headerShown: false }}
             />
-            <Stack.Screen
-                name="CadastroBio"
-                component={Bio}
-                options={{ headerShown: false }}
-            /> */}
         </Stack.Navigator>
     );
 }

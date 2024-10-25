@@ -1,41 +1,42 @@
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import LandingIntroducao from "../../components/LandingIntroducao";
-import useTheme from "../../hooks/UseTheme";
+import React from 'react';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import LandingIntroducao from '../../components/LandingIntroducao';
+import useTheme from '../../hooks/UseTheme';
 
 interface Props {
     navigation: any;
-};
+}
 
 export default function Introducao({ navigation }: Props) {
     const { theme } = useTheme();
 
     const styles = StyleSheet.create({
         pagina: {
-            display: "flex",
-            justifyContent: "space-between",
-            height: "100%",
+            display: 'flex',
+            justifyContent: 'space-between',
+            height: '100%',
             paddingBottom: 75,
-            backgroundColor: theme.colors.background
+            backgroundColor: theme.colors.background,
         },
         titulo: {
-            margin: "auto",
+            margin: 'auto',
             fontSize: 32,
-            color: theme.colors.text
+            color: theme.colors.text,
         },
         appNameText: {
-            color: theme.colors.primary
+            color: theme.colors.primary,
         },
         buttons: {
-            display: "flex",
+            display: 'flex',
             gap: 20,
-            margin: "auto"
+            margin: 'auto',
         },
         btnEntrar: {
             backgroundColor: theme.colors.primary,
-            margin: "auto",
+            margin: 'auto',
             paddingHorizontal: 25,
             paddingVertical: 5,
-            textAlign: "center",
+            textAlign: 'center',
             borderTopLeftRadius: 35,
             borderTopRightRadius: 25,
             borderBottomLeftRadius: 25,
@@ -43,10 +44,10 @@ export default function Introducao({ navigation }: Props) {
         },
         btnCadastrar: {
             backgroundColor: theme.colors.primary,
-            margin: "auto",
+            margin: 'auto',
             paddingHorizontal: 20,
             paddingVertical: 5,
-            textAlign: "center",
+            textAlign: 'center',
             borderTopLeftRadius: 25,
             borderTopRightRadius: 35,
             borderBottomLeftRadius: 35,
@@ -54,28 +55,26 @@ export default function Introducao({ navigation }: Props) {
         },
         btnTexto: {
             color: theme.colors.text,
-            fontSize: 24
-        }
+            fontSize: 24,
+        },
     });
 
     return (
         <View style={styles.pagina}>
             <Text style={styles.titulo}>Bem-vindo ao <Text style={styles.appNameText}>Finder</Text></Text>
 
-            <LandingIntroducao
-                navigation={navigation}
-            ></LandingIntroducao>
+            <LandingIntroducao/>
 
             <View style={styles.buttons}>
                 <TouchableOpacity
                     style={styles.btnEntrar}
-                    onPress={() => navigation.navigate("Login")}
+                    onPress={() => navigation.navigate('Login')}
                 >
                     <Text style={styles.btnTexto}>Entrar</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                     style={styles.btnCadastrar}
-                    onPress={() => navigation.navigate("Cadastro")}
+                    onPress={() => navigation.navigate('Cadastro')}
                 >
                     <Text style={styles.btnTexto}>Cadastrar</Text>
                 </TouchableOpacity>

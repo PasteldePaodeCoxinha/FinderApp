@@ -1,11 +1,11 @@
-import { useState } from "react";
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import useTheme from "../../hooks/UseTheme";
+import React, { useState } from 'react';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import useTheme from '../../hooks/UseTheme';
 import DateTimePicker from '@react-native-community/datetimepicker';
 
 interface Props {
     setDate: (date: Date) => void;
-};
+}
 
 export default function CustomDateInput(props: Props) {
     const { theme } = useTheme();
@@ -16,8 +16,8 @@ export default function CustomDateInput(props: Props) {
 
     const styles = StyleSheet.create({
         input: {
-            display: "flex",
-            alignItems: "center"
+            display: 'flex',
+            alignItems: 'center',
         },
         image: {
             width: 25,
@@ -25,22 +25,22 @@ export default function CustomDateInput(props: Props) {
         },
         touchable: {
             borderRadius: 15,
-            borderColor: (date != null ? "green" : theme.colors.border),
+            borderColor: (date != null ? 'green' : theme.colors.border),
             borderWidth: (isFocused ? 3 : 2),
             padding: 10,
-            backgroundColor: "white",
+            backgroundColor: 'white',
 
-            display: "flex",
-            flexDirection: "row",
-            alignItems: "center",
-            gap: 10
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            gap: 10,
         },
         texto: {
-            color: theme.colors.text
+            color: theme.colors.text,
         },
         textoErr: {
-            color: theme.colors.primary
-        }
+            color: theme.colors.primary,
+        },
     });
 
 
@@ -48,8 +48,8 @@ export default function CustomDateInput(props: Props) {
         const currentDate = selectedDate || date;
         setShow(false);
         setDate(currentDate);
-        if (currentDate) props.setDate(currentDate);
-    };
+        if (currentDate) { props.setDate(currentDate); }
+    }
 
     return (
         <View style={styles.input}>
@@ -61,11 +61,11 @@ export default function CustomDateInput(props: Props) {
             >
                 <Image
                     style={styles.image}
-                    source={require("../../../assets/images/cadastro/birthday.png")}
+                    source={require('../../../assets/images/cadastro/birthday.png')}
                 />
                 <Text style={styles.texto}>{date ? (
                     date.toLocaleDateString()
-                ) : "Nascimento"}
+                ) : 'Nascimento'}
                 </Text>
             </TouchableOpacity>
             {erroMsg && <Text style={styles.textoErr}>{erroMsg}</Text>}
@@ -76,6 +76,7 @@ export default function CustomDateInput(props: Props) {
                     mode="date"
                     is24Hour={true}
                     onChange={onChange}
+                    maximumDate={new Date(new Date().getFullYear() - 18, new Date().getMonth(), new Date().getDate())}
                 />
             )}
         </View>

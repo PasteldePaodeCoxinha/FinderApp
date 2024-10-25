@@ -1,11 +1,11 @@
-import { useState } from "react";
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import useTheme from "../../hooks/UseTheme";
+import React, { useState } from 'react';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import useTheme from '../../hooks/UseTheme';
 import Geolocation from 'react-native-geolocation-service';
 
 interface Props {
     setLocation: (location: { latitude: number; longitude: number }) => void;
-};
+}
 
 export default function CustomLocationInput(props: Props) {
     const { theme } = useTheme();
@@ -15,8 +15,8 @@ export default function CustomLocationInput(props: Props) {
 
     const styles = StyleSheet.create({
         input: {
-            display: "flex",
-            alignItems: "center"
+            display: 'flex',
+            alignItems: 'center',
         },
         image: {
             width: 25,
@@ -24,22 +24,22 @@ export default function CustomLocationInput(props: Props) {
         },
         touchable: {
             borderRadius: 15,
-            borderColor: (location != null ? "green" : theme.colors.border),
+            borderColor: (location != null ? 'green' : theme.colors.border),
             borderWidth: (isFocused ? 3 : 2),
             padding: 10,
-            backgroundColor: "white",
+            backgroundColor: 'white',
 
-            display: "flex",
-            flexDirection: "row",
-            alignItems: "center",
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
             gap: 10,
         },
         texto: {
-            color: theme.colors.text
+            color: theme.colors.text,
         },
         textoErr: {
-            color: theme.colors.primary
-        }
+            color: theme.colors.primary,
+        },
     });
 
     const getLocation = () => {
@@ -47,7 +47,7 @@ export default function CustomLocationInput(props: Props) {
             (position) => {
                 const { latitude, longitude } = position.coords;
                 setLocation({ latitude, longitude });
-                setErroMsg("");
+                setErroMsg('');
             },
             (error) => {
                 setErroMsg(error.message);
@@ -67,9 +67,9 @@ export default function CustomLocationInput(props: Props) {
             >
                 <Image
                     style={styles.image}
-                    source={require("../../../assets/images/cadastro/location.png")}
+                    source={require('../../../assets/images/cadastro/location.png')}
                 />
-                <Text style={styles.texto}>{location ? "Localizado" : "Localização"}</Text>
+                <Text style={styles.texto}>{location ? 'Localizado' : 'Localização'}</Text>
             </TouchableOpacity>
             {erroMsg && <Text style={styles.textoErr}>{erroMsg}</Text>}
         </View>
