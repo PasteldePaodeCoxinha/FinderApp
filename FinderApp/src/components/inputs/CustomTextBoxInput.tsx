@@ -67,6 +67,7 @@ export default function CustomTextBoxInput(props: Props) {
                 secureTextEntry={props.secure}
                 onFocus={() => setIsFocused(true)}
                 onBlur={() => setIsFocused(false)}
+                value={text}
             />
             {erroMsg && <Text style={styles.textoErr}>{erroMsg}</Text>}
         </View>

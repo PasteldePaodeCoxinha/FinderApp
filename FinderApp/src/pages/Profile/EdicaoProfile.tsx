@@ -82,21 +82,21 @@ export default function EdicaoProfile({ navigation }: Props) {
     }, []);
 
     const editarInfoUsuario = async () => {
-            await fetch('https://finder-app-back.vercel.app/usuario/editar', {
-                method: 'POST',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    'id': usuarioId,
-                    'nome': nome,
-                    'dataNasc': dataNasc.toISOString,
-                    'profissao': profissao,
-                    'escolaridade': escolaridade,
-                    'descricao': desc,
-                }),
-            });
+        await fetch('https://finder-app-back.vercel.app/usuario/editar', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                'id': usuarioId,
+                'nome': nome,
+                'dataNasc': dataNasc.toISOString,
+                'profissao': profissao,
+                'escolaridade': escolaridade,
+                'descricao': desc,
+            }),
+        });
     };
 
     const enviarReqEditarUsuario = () => {
@@ -111,13 +111,15 @@ export default function EdicaoProfile({ navigation }: Props) {
     const styles = StyleSheet.create({
         pagina: {
             display: 'flex',
+            gap: 20,
             justifyContent: 'space-between',
             width: '100%',
+            minHeight: 'auto',
             backgroundColor: theme.colors.background,
             alignItems: 'center',
             flexDirection: 'column',
             flexWrap: 'wrap',
-            gap: 11,
+            paddingBottom: 80,
         },
         titulo: {
             fontSize: 24,
@@ -134,7 +136,7 @@ export default function EdicaoProfile({ navigation }: Props) {
             width: '80%',
         },
         inputDesc: {
-            padding: '8%',
+            paddingHorizontal: 20,
             height: '40%',
         },
         botaoSalvar: {
@@ -152,9 +154,15 @@ export default function EdicaoProfile({ navigation }: Props) {
             color: theme.colors.text,
             fontSize: 24,
         },
+        viewInputs: {
+            display: 'flex',
+            flex: 1,
+            gap: 10,
+            alignItems: 'center',
+        },
         inputGostosInteresses: {
             display: 'flex',
-            gap: 5,
+            flex: 1,
             flexDirection: 'column',
             alignItems: 'center',
             margin: 'auto',
@@ -177,73 +185,95 @@ export default function EdicaoProfile({ navigation }: Props) {
             borderWidth: 3,
             borderRadius: 100,
         },
+        inputOptions: {
+            // backgroundColor: 'red',
+            // flex: 1,
+        },
+        containerPagina: {
+            width: '100%',
+            minHeight: '100%',
+        },
+        nav: {
+            position: 'absolute',
+            width: '100%',
+            bottom: 0,
+        }
     });
 
     return (
-        <ScrollView contentContainerStyle={styles.pagina}>
-            <Text style={styles.titulo}>Informação do Perfil</Text>
+        <View style={styles.containerPagina}>
+            <ScrollView contentContainerStyle={styles.pagina}>
+                <Text style={styles.titulo}>Informação do Perfil</Text>
 
-            <View style={styles.inputText}>
-                <CustomTextInput setText={setNome} value={nome} placeholder="Nome..." />
-            </View>
+                <View style={styles.viewInputs}>
+                    <View style={styles.inputText}>
+                        <CustomTextInput setText={setNome} value={nome} placeholder="Nome..." />
+                    </View>
 
-            <View style={styles.nascLocal}>
-                <CustomDateInput setDate={setDataNasc} />
-                <CustomLocationInput setLocation={() => { }} />
-            </View>
+                    <View style={styles.nascLocal}>
+                        <CustomDateInput setDate={setDataNasc} />
+                        <CustomLocationInput setLocation={() => { }} />
+                    </View>
 
-            <View style={styles.inputText}>
-                <CustomTextInput setText={setProfissao} value={profissao} placeholder="Profissão..." />
-            </View>
+                    <View style={styles.inputText}>
+                        <CustomTextInput setText={setProfissao} value={profissao} placeholder="Profissão..." />
+                    </View>
 
-            <View style={styles.inputText}>
-                <CustomTextInput setText={setEscolaridade} value={escolaridade} placeholder="Escolaridade" />
-            </View>
+                    <View style={styles.inputText}>
+                        <CustomTextInput setText={setEscolaridade} value={escolaridade} placeholder="Escolaridade" />
+                    </View>
 
-            <View style={styles.inputDesc}>
-                <CustomTextBoxInput setText={setDesc} placeholder={desc} />
-            </View>
+                    <View style={styles.inputDesc}>
+                        <CustomTextBoxInput setText={setDesc} placeholder={desc} />
+                    </View>
+                </View>
 
-            <View style={styles.inputGostosInteresses}>
-                {((gostos.length > 0) && showGostos) ? (
-                    <CustomOptionsInput
-                        options={gostos}
-                        setOptions={setGostosSelecionados}
-                        titulo="Quais são seus gostos?"
-                        minSelected={5}
-                    />
-                ) : (
-                    <TouchableOpacity style={styles.touchBotaoShowInteGos} onPress={() => { setShowGostos(true); }}>
-                        <Image
-                            style={styles.botoesShowInteGos}
-                            source={require('../../../assets/images/perfil/lapisedicao.png')}
+                {/* <View style={styles.inputGostosInteresses}> */}
+                {/* {((gostos.length > 0) && showGostos) ? (
+                        <CustomOptionsInput
+                            options={gostos}
+                            style={styles.inputOptions}
+                            setOptions={setGostosSelecionados}
+                            titulo="Quais são seus gostos?"
+                            minSelected={5}
                         />
-                        <Text style={styles.textoShowInteGos}>Gostos</Text>
-                    </TouchableOpacity>
-                )}
-                {((interesses.length > 0) && showInteresses) ? (
-                    <CustomOptionsInput
-                        options={interesses}
-                        setOptions={setInteressesSelecionados}
-                        titulo="Quais são seus interesses?"
-                        minSelected={3}
-                    />
-                ) : (
-                    <TouchableOpacity style={styles.touchBotaoShowInteGos} onPress={() => { setShowInteresses(true); }}>
-                        <Image
-                            style={styles.botoesShowInteGos}
-                            source={require('../../../assets/images/perfil/lapisedicao.png')}
+                    ) : (
+                        <TouchableOpacity style={styles.touchBotaoShowInteGos} onPress={() => { setShowGostos(true); }}>
+                            <Image
+                                style={styles.botoesShowInteGos}
+                                source={require('../../../assets/images/perfil/lapisedicao.png')}
+                            />
+                            <Text style={styles.textoShowInteGos}>Gostos</Text>
+                        </TouchableOpacity>
+                    )}
+
+                    {((interesses.length > 0) && showInteresses) ? (
+                        <CustomOptionsInput
+                            options={interesses}
+                            setOptions={setInteressesSelecionados}
+                            titulo="Quais são seus interesses?"
+                            minSelected={3}
                         />
-                        <Text style={styles.textoShowInteGos}>Interesses</Text>
-                    </TouchableOpacity>
-                )}
-            </View>
+                    ) : (
+                        <TouchableOpacity style={styles.touchBotaoShowInteGos} onPress={() => { setShowInteresses(true); }}>
+                            <Image
+                                style={styles.botoesShowInteGos}
+                                source={require('../../../assets/images/perfil/lapisedicao.png')}
+                            />
+                            <Text style={styles.textoShowInteGos}>Interesses</Text>
+                        </TouchableOpacity>
+                    )} */}
+                {/* </View> */}
 
-            <TouchableOpacity style={styles.botaoSalvar} onPress={enviarReqEditarUsuario}>
-                <Text style={styles.botaoSalvarTexto}>Salvar</Text>
-            </TouchableOpacity>
+                <TouchableOpacity style={styles.botaoSalvar} onPress={enviarReqEditarUsuario}>
+                    <Text style={styles.botaoSalvarTexto}>Salvar</Text>
+                </TouchableOpacity>
 
-            <Nav navigation={navigation} />
-        </ScrollView>
+            </ScrollView>
+            <Nav
+                navigation={navigation}
+                style={styles.nav}
+            />
+        </View>
     );
 }

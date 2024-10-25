@@ -3,10 +3,11 @@ import { StyleSheet, View } from 'react-native';
 import NavButton from './inputs/NavButton';
 
 interface Props {
-    navigation: any
+    navigation: any;
+    style?: any;
 }
 
-export default function Nav({ navigation }: Props) {
+export default function Nav({ navigation, style }: Props) {
     const styles = StyleSheet.create({
         nav: {
             display: 'flex',
@@ -20,7 +21,7 @@ export default function Nav({ navigation }: Props) {
 
     return (
         <View
-            style={styles.nav}
+            style={[styles.nav, style]}
         >
             <NavButton
                 image={require("../../assets/images/nav/search.png")}

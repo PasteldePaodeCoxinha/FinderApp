@@ -9,13 +9,13 @@ export default function Profile() {
     return (
         <Stack.Navigator>
             <Stack.Screen
-                name="EdicaoProfile"
-                component={EdicaoProfile}
+                name="ProfileBase"
+                component={ProfileBase}
                 options={{ headerShown: false }}
             />
             <Stack.Screen
-                name="ProfileBase"
-                component={ProfileBase}
+                name="EdicaoProfile"
+                component={EdicaoProfile}
                 options={{ headerShown: false }}
             />
         </Stack.Navigator>

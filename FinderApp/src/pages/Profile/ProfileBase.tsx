@@ -120,6 +120,7 @@ export default function ProfileBase({ navigation }: Props) {
             borderRadius: 10,
             borderWidth: 1,
             height: '40%',
+            minWidth: '90%',
         },
         desc: {
             fontSize: 29,

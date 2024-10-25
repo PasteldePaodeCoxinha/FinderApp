@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import useTheme from '../../hooks/UseTheme';
+import { FlatList } from 'react-native-gesture-handler';
 
 interface Props {
     options: Array<{ id: number; nome: string; }>;
     setOptions: (options: Array<{ id: number; nome: string; }>) => void;
     titulo: string;
     minSelected: number;
+    style?: any
 }
 
 export default function CustomOptionsInput(props: Props) {
@@ -94,12 +96,15 @@ export default function CustomOptionsInput(props: Props) {
     }
 
     return (
-        <View style={styles.input}>
+        <View style={[styles.input, props.style]}>
             <View style={styles.titulo}>
                 <Text style={styles.texto}>{props.titulo}</Text>
                 <Text style={styles.texto}>{selectedCount()}/{props.minSelected}</Text>
             </View>
-            <ScrollView style={styles.optionsContainer}>
+            <ScrollView
+                style={styles.optionsContainer}
+                horizontal={true}
+            >
                 {optionsButtons()}
             </ScrollView>
         </View>
