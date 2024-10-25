@@ -105,6 +105,7 @@ export default function EmailSenha(props: Props) {
 
             <CustomButton
                 onPress={Continuar}
+                text="Continue"
             />
         </View>
     );

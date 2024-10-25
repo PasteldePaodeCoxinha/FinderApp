@@ -73,6 +73,7 @@ export default function Bio(props: Props) {
 
             <CustomButton
                 onPress={Continuar}
+                text="Continue"
             />
         </View>
     );

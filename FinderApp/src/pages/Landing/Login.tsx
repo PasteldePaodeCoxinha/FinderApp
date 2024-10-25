@@ -10,8 +10,8 @@ interface Props {
 
 export default function Login({ navigation }: Props) {
     const { theme } = useTheme();
-    const [email, setEmail] = useState<string>();
-    const [senha, setSenha] = useState<string>();
+    const [email, setEmail] = useState<string>("");
+    const [senha, setSenha] = useState<string>("");
 
     const styles = StyleSheet.create({
         pagina: {
@@ -79,11 +79,13 @@ export default function Login({ navigation }: Props) {
                 <CustomTextInput
                     setText={setEmail}
                     placeholder="E-mail"
+                    value={email}
                 />
                 <CustomTextInput
                     setText={setSenha}
                     placeholder="Senha"
                     secure={true}
+                    value={senha}
                 />
             </View>
 
