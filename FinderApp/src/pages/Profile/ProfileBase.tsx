@@ -10,6 +10,7 @@ interface Props {
 }
 
 export default function ProfileBase({ navigation }: Props) {
+    const [usuarioId, setUsuarioId] = useState<number>(0);
     const [nome, setNome] = useState<string>('');
     const [idade, setIdade] = useState<number>(0);
     const [img, setImg] = useState<string>('');
@@ -26,6 +27,7 @@ export default function ProfileBase({ navigation }: Props) {
         if (response.status === 200) {
             const usuario = data.Usuario;
 
+            setUsuarioId(usuario.id);
             setNome(usuario.nome);
 
             let timeDiff = Math.abs(Date.now() - (new Date(usuario.datanascimento)).getTime());
@@ -42,6 +44,35 @@ export default function ProfileBase({ navigation }: Props) {
     useEffect(() => {
         getUsuario();
     }, []);
+
+    useEffect(() => {
+        const mudarImgPerfil = async () => {
+            try {
+                const response = await fetch('https://finder-app-back.vercel.app/usuario/editar', {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        'id': usuarioId,
+                        'imgperfil': img,
+                    }),
+                });
+
+                const data = await response.json();
+                if (response.ok) {
+                    console.log('Imagem de perfil alterada');
+                } else {
+                    Alert.alert('Falha ao cadastrar:', data.msg);
+                }
+            } catch (error) {
+                console.log('Erro: ', error);
+            }
+        };
+
+        mudarImgPerfil();
+    }, [img, usuarioId]);
 
     const styles = StyleSheet.create({
         pagina: {
@@ -83,13 +114,16 @@ export default function ProfileBase({ navigation }: Props) {
             fontSize: 24,
             color: '#1E1E1E',
         },
-        desc: {
-            padding: '20%',
+        containerDesc: {
+            padding: '4%',
             borderColor: '#555050',
             borderRadius: 10,
             borderWidth: 1,
             height: '40%',
-            width: '40%',
+        },
+        desc: {
+            fontSize: 29,
+            color: '#1E1E1E',
         },
     });
     return (
@@ -108,7 +142,7 @@ export default function ProfileBase({ navigation }: Props) {
                 </TouchableOpacity>
             </View>
 
-            <View>
+            <View style={styles.containerDesc}>
                 <Text style={styles.desc}>
                     {desc}
                 </Text>
