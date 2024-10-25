@@ -13,13 +13,8 @@ export default function Profile() {
                 options={{ headerShown: false }}
             />
             {/* <Stack.Screen
-                name="CadastroGostosInteresses"
+                name="edicaoProfile"
                 component={GostosInteresses}
-                options={{ headerShown: false }}
-            />
-            <Stack.Screen
-                name="CadastroBio"
-                component={Bio}
                 options={{ headerShown: false }}
             /> */}
         </Stack.Navigator>

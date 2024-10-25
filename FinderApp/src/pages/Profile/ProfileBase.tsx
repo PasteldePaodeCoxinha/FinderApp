@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, Image, TouchableOpacity, Alert} from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity, Alert } from 'react-native';
 import Nav from '../../components/Nav';
 import useTheme from '../../hooks/UseTheme';
-import CustomTextBoxInput from '../../components/inputs/CustomTextBoxInput';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import CustomImageInput from '../../components/inputs/CustomImageInput';
 
@@ -11,24 +10,22 @@ interface Props {
 }
 
 export default function ProfileBase({ navigation }: Props) {
-    const [usuarioId, setUsuarioId] = useState<number>(0);
     const [nome, setNome] = useState<string>('');
     const [idade, setIdade] = useState<number>(0);
     const [img, setImg] = useState<string>('');
     const [desc, setDesc] = useState<string>('');
     const { theme } = useTheme();
 
-    const getUsuario = async() => {
+    const getUsuario = async () => {
         let idUsuario = await AsyncStorage.getItem('idUsuario');
         if (idUsuario === null) {
-            idUsuario = '40';
+            idUsuario = '45';
         }
         const response = await fetch(`https://finder-app-back.vercel.app/usuario/getUmUsuario?id=${idUsuario}`);
         const data = await response.json();
         if (response.status === 200) {
             const usuario = data.Usuario;
 
-            setUsuarioId(usuario.id);
             setNome(usuario.nome);
 
             let timeDiff = Math.abs(Date.now() - (new Date(usuario.datanascimento)).getTime());
@@ -38,43 +35,13 @@ export default function ProfileBase({ navigation }: Props) {
             setDesc(usuario.descricao);
             setImg(usuario.imgperfil);
         } else {
-            Alert.alert('Erro: ', data);
+            Alert.alert('Erro: ', data.msg);
         }
     };
 
     useEffect(() => {
         getUsuario();
-    },[]);
-
-    useEffect(() => {
-        const atualizarDesc = () => {
-            setTimeout(async() => {
-                const response = await fetch('https://finder-app-back.vercel.app/usuario/editar', {
-                    method: 'POST',
-                    headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        'id': usuarioId,
-                        'descricao': desc,
-                    }),
-                });
-
-                const data = await response.json();
-                if (response.ok) {
-                    console.log('Descrição atualizado');
-                } else {
-                    Alert.alert('Falha ao atualizar a descrição: ', data.msg);
-                }
-            }, 500);
-        };
-        atualizarDesc();
-    }, [desc, usuarioId]);
-
-    useEffect(() => {
-        console.log(desc);
-    }, [desc]);
+    }, []);
 
     const styles = StyleSheet.create({
         pagina: {
@@ -116,11 +83,19 @@ export default function ProfileBase({ navigation }: Props) {
             fontSize: 24,
             color: '#1E1E1E',
         },
+        desc: {
+            padding: '20%',
+            borderColor: '#555050',
+            borderRadius: 10,
+            borderWidth: 1,
+            height: '40%',
+            width: '40%',
+        },
     });
     return (
         <View style={styles.pagina}>
             <View style={styles.informacoesBasi}>
-                <CustomImageInput setImage={setImg} defaultImage={img}/>
+                <CustomImageInput setImage={setImg} defaultImage={img} />
                 <Text style={styles.textoInfo}>{nome}, {idade}</Text>
             </View>
 
@@ -134,9 +109,9 @@ export default function ProfileBase({ navigation }: Props) {
             </View>
 
             <View>
-                <CustomTextBoxInput
-                    setText={setDesc}
-                />
+                <Text style={styles.desc}>
+                    {desc}
+                </Text>
             </View>
 
             <Nav
