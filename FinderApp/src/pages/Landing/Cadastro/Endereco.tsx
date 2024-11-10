@@ -1,21 +1,20 @@
 import { StyleSheet, Text, View } from "react-native";
-import CustomImageInput from "../../../components/inputs/CustomImageInput";
 import useTheme from "../../../hooks/UseTheme";
 import CustomButton from "../../../components/inputs/CustomButton";
 import CustomTextInput from "../../../components/inputs/CustomTextInput";
-import CustomDateInput from "../../../components/inputs/CustomDateInput";
-import CustomLocationInput from "../../../components/inputs/CustomLocationInput";
 
 interface Props {
-    propSetImg: React.Dispatch<React.SetStateAction<string>>;
-    propSetNome: React.Dispatch<React.SetStateAction<string>>;
-    propSetNascimento: React.Dispatch<React.SetStateAction<Date>>;
-    propSetProfissao: React.Dispatch<React.SetStateAction<string>>;
-    propSetEscolaridade: React.Dispatch<React.SetStateAction<string>>;
+    propSetNumCasa: React.Dispatch<React.SetStateAction<number>>;
+    propSetRua: React.Dispatch<React.SetStateAction<string>>;
+    propSetBairro: React.Dispatch<React.SetStateAction<string>>;
+    propSetCidade: React.Dispatch<React.SetStateAction<string>>;
+    propSetEstado: React.Dispatch<React.SetStateAction<string>>;
+    propSetRegiao: React.Dispatch<React.SetStateAction<string>>;
+    propSetCep: React.Dispatch<React.SetStateAction<string>>;
     continuar: () => void;
 };
 
-export default function Basico(props: Props) {
+export default function Endereco(props: Props) {
     const { theme } = useTheme();
 
     const styles = StyleSheet.create({
@@ -55,11 +54,6 @@ export default function Basico(props: Props) {
             color: theme.colors.text,
             fontSize: 24
         },
-        nascimentoLocalizacao: {
-            display: "flex",
-            gap: 5,
-            flexDirection: "row"
-        }
     });
 
     function Continuar() {
@@ -68,31 +62,32 @@ export default function Basico(props: Props) {
 
     return (
         <View style={styles.pagina}>
-            <Text style={styles.titulo}>Preencha algumas informações básicas</Text>
+            <Text style={styles.titulo}>Preencha o seu endereço</Text>
 
             <View style={styles.inputs}>
-                <CustomImageInput setImage={props.propSetImg} />
                 <CustomTextInput
-                    setText={props.propSetNome}
-                    placeholder="Nome"
-                />
-
-                <View style={styles.nascimentoLocalizacao}>
-                    <CustomDateInput
-                        setDate={props.propSetNascimento}
-                    />
-                    {/* <CustomLocationInput
-                        setLocation={() => { }}
-                    /> */}
-                </View>
-
-                <CustomTextInput
-                    setText={props.propSetProfissao}
-                    placeholder="Profissão"
+                    setText={props.propSetRua}
+                    placeholder="Rua"
                 />
                 <CustomTextInput
-                    setText={props.propSetEscolaridade}
-                    placeholder="Escolaridade"
+                    setText={props.propSetBairro}
+                    placeholder="Bairro"
+                />
+                <CustomTextInput
+                    setText={props.propSetCidade}
+                    placeholder="Cidade"
+                />
+                <CustomTextInput
+                    setText={props.propSetEstado}
+                    placeholder="Estado"
+                />
+                <CustomTextInput
+                    setText={props.propSetRegiao}
+                    placeholder="Regiao"
+                />
+                <CustomTextInput
+                    setText={props.propSetCep}
+                    placeholder="CEP"
                 />
             </View>
 
