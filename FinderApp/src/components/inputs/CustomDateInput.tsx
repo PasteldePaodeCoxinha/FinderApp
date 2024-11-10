@@ -28,13 +28,13 @@ export default function CustomDateInput(props: Props) {
             borderColor: (date != null ? "green" : theme.colors.border),
             borderWidth: (isFocused ? 3 : 2),
             padding: 10,
-            paddingRight: 40,
             backgroundColor: "white",
+            minWidth: "100%",
 
             display: "flex",
             flexDirection: "row",
             alignItems: "center",
-            gap: 40
+            gap: 50
         },
         texto: {
             color: theme.colors.text
