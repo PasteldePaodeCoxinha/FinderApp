@@ -82,9 +82,9 @@ export default function Basico(props: Props) {
                     <CustomDateInput
                         setDate={props.propSetNascimento}
                     />
-                    <CustomLocationInput
+                    {/* <CustomLocationInput
                         setLocation={() => { }}
-                    />
+                    /> */}
                 </View>
 
                 <CustomTextInput

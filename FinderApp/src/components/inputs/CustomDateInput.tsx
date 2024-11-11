@@ -28,12 +28,13 @@ export default function CustomDateInput(props: Props) {
             borderColor: (date != null ? 'green' : theme.colors.border),
             borderWidth: (isFocused ? 3 : 2),
             padding: 10,
-            backgroundColor: 'white',
+            backgroundColor: "white",
+            minWidth: "100%",
 
-            display: 'flex',
-            flexDirection: 'row',
-            alignItems: 'center',
-            gap: 10,
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+            gap: 50
         },
         texto: {
             color: theme.colors.text,
@@ -51,6 +52,10 @@ export default function CustomDateInput(props: Props) {
         if (currentDate) { props.setDate(currentDate); }
     }
 
+    const today = new Date();
+    const maxDate = new Date();
+    maxDate.setFullYear(today.getFullYear() - 18);
+
     return (
         <View style={styles.input}>
             <TouchableOpacity
@@ -65,7 +70,7 @@ export default function CustomDateInput(props: Props) {
                 />
                 <Text style={styles.texto}>{date ? (
                     date.toLocaleDateString()
-                ) : 'Nascimento'}
+                ) : "Data de Nascimento"}
                 </Text>
             </TouchableOpacity>
             {erroMsg && <Text style={styles.textoErr}>{erroMsg}</Text>}

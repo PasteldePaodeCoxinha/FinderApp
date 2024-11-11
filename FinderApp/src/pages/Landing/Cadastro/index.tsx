@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
-import EmailSenha from './EmailSenha';
-import Basico from './Basico';
-import GostosInteresses from './GostosInteresses';
-import Bio from './Bio';
-import { Alert } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useState } from "react";
+import { Alert } from "react-native";
+import EmailSenha from "./EmailSenha";
+import Basico from "./Basico";
+import Endereco from "./Endereco";
+import GostosInteresses from "./GostosInteresses";
+import Bio from "./Bio";
 
 interface Props {
     navigation: any;
@@ -12,17 +12,29 @@ interface Props {
 
 export default function Cadastro({ navigation }: Props) {
     const [usuarioId, setUsuarioId] = useState<number>(0);
-    const [imagem, setImagem] = useState<string>('');
-    const [nome, setNome] = useState<string>('');
-    const [email, setEmail] = useState<string>('');
-    const [senha, setSenha] = useState<string>('');
+    // Email e senha
+    const [email, setEmail] = useState<string>("");
+    const [senha, setSenha] = useState<string>("");
+    // Cadastro básico
+    const [imagem, setImagem] = useState<string>("");
+    const [nome, setNome] = useState<string>("");
     const [nascimento, setNascimento] = useState<Date>(new Date());
-    const [profissao, setProfissao] = useState<string>('');
-    const [escolaridade, setEscolaridade] = useState<string>('');
+    const [profissao, setProfissao] = useState<string>("");
+    const [escolaridade, setEscolaridade] = useState<string>("");
+    // Endereço
+    const [numCasa, setNumCasa] = useState<number>(0);
+    const [rua, setRua] = useState<string>("");
+    const [bairro, setBairro] = useState<string>("");
+    const [cidade, setCidade] = useState<string>("");
+    const [estado, setEstado] = useState<string>("");
+    const [regiao, setRegiao] = useState<string>("");
+    const [cep, setCep] = useState<string>("");
+    // Gostos e interesses
     const [gostosSelecionados, setGostosSelecionados] = useState<Array<{ nome: string, id: number }>>([]);
     const [interessesSelecionados, setInteressesSelecionados] = useState<Array<{ nome: string, id: number }>>([]);
-    const [descricao, setDescricao] = useState<string>('');
-    const [etapa, setEtapa] = useState<string>('EmailSenha');
+    // Bio
+    const [descricao, setDescricao] = useState<string>("");
+    const [etapa, setEtapa] = useState<string>("EmailSenha");
 
     function formatDate(date: Date): string {
         const ano = date.getFullYear();
@@ -30,6 +42,26 @@ export default function Cadastro({ navigation }: Props) {
         const dia = String(date.getDate()).padStart(2, '0');
 
         return `${ano}-${mes}-${dia}`;
+    }
+
+    async function CoordEndereco() {
+        const response = await fetch(`https://geocode.maps.co/search?q=${rua}&api_key=672e1c4343173104936362wko0de6b0`);
+
+        const data = await response.json();
+        if (response.ok) {
+            if (data.length > 0) {
+                return {
+                    lat: data[0].lat,
+                    lon: data[0].lon
+                };
+            }
+        } else {
+            Alert.alert("Falha ao cadastrar:", data.msg);
+        }
+        return {
+            lat: 0,
+            lon: 0
+        }
     }
 
     async function cadastrar() {
@@ -54,10 +86,44 @@ export default function Cadastro({ navigation }: Props) {
         const data = await response.json();
         if (response.ok) {
             setUsuarioId(data.id);
-            setEtapa('GostosInteresses');
-            await AsyncStorage.setItem('idUsuario', data.id.toString());
+            setEtapa("CadastroEndereco");
         } else {
             Alert.alert('Falha ao cadastrar:', data.msg);
+        }
+    }
+
+    async function cadastrarEndereco() {
+        // Buscar as coordenadas do endereço
+        const coords = await CoordEndereco();
+        if (coords == undefined) return;
+
+        console.log("coords", coords);
+        const response = await fetch("https://finder-app-back.vercel.app/localizacao/cadastrar", {
+            method: "POST",
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                "numero_casa": numCasa,
+                "rua": rua,
+                "bairro": bairro,
+                "cidade": cidade,
+                "estado": estado,
+                "regiao": regiao,
+                "cep": cep,
+                "longi": coords.lon,
+                "lati": coords.lat,
+                "usuario_id": usuarioId
+            })
+        });
+
+        const data = await response.json();
+        if (response.ok) {
+            console.log(data);
+            setEtapa("GostosInteresses");
+        } else {
+            Alert.alert("Falha ao cadastrar endereço:", data.msg);
         }
     }
 
@@ -112,7 +178,10 @@ export default function Cadastro({ navigation }: Props) {
             case 'CadastroBasico':
                 cadastrar();
                 break;
-            case 'GostosInteresses':
+            case "CadastroEndereco":
+                cadastrarEndereco();
+                break;
+            case "GostosInteresses":
                 atualizarGostosInteresses();
                 break;
             case 'CadastroBio':
@@ -142,7 +211,20 @@ export default function Cadastro({ navigation }: Props) {
                         continuar={proximaEtapa}
                     />
                 );
-            case 'GostosInteresses':
+            case "CadastroEndereco":
+                return (
+                    <Endereco
+                        propSetNumCasa={setNumCasa}
+                        propSetRua={setRua}
+                        propSetBairro={setBairro}
+                        propSetCidade={setCidade}
+                        propSetEstado={setEstado}
+                        propSetRegiao={setRegiao}
+                        propSetCep={setCep}
+                        continuar={proximaEtapa}
+                    />
+                );
+            case "GostosInteresses":
                 return (
                     <GostosInteresses
                         propsSetGostosSelecionados={setGostosSelecionados}
