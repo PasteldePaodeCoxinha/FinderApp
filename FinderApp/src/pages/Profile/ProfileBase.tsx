@@ -45,6 +45,10 @@ export default function ProfileBase({ navigation }: Props) {
         getUsuario();
     }, []);
 
+    navigation.addListener('didFocus', () => {
+        getUsuario()
+    });
+
     useEffect(() => {
         const mudarImgPerfil = async () => {
             try {

@@ -35,7 +35,7 @@ export default function CustomTextInput(props: Props) {
             } else {
                 setErroMsg('');
             }
-        }, [(props.value ? props.value : text), isFocused]);
+        }, [props.value, text, isFocused]);
     }
 
     const styles = StyleSheet.create({
@@ -63,11 +63,11 @@ export default function CustomTextInput(props: Props) {
             <TextInput
                 style={styles.input}
                 placeholder={props.placeholder}
-                onChangeText={(txt: string) => { setText(txt); props.setText(txt) }}
+                onChangeText={(txt: string) => { props.setText(txt); setText(txt); }}
                 secureTextEntry={props.secure}
                 onFocus={() => setIsFocused(true)}
                 onBlur={() => setIsFocused(false)}
-                value={(props.value ? props.value : text)}
+                value={props.value}
             />
             {erroMsg && <Text style={styles.textoErr}>{erroMsg}</Text>}
         </View>

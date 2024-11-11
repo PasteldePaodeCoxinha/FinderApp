@@ -232,6 +232,7 @@ export default function EdicaoProfile({ navigation }: Props) {
                 {/* {((gostos.length > 0) && showGostos) ? (
                         <CustomOptionsInput
                             options={gostos}
+                            horizontal={true}
                             style={styles.inputOptions}
                             setOptions={setGostosSelecionados}
                             titulo="Quais são seus gostos?"
@@ -250,6 +251,7 @@ export default function EdicaoProfile({ navigation }: Props) {
                     {((interesses.length > 0) && showInteresses) ? (
                         <CustomOptionsInput
                             options={interesses}
+                            horizontal={true}
                             setOptions={setInteressesSelecionados}
                             titulo="Quais são seus interesses?"
                             minSelected={3}

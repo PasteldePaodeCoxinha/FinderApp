@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import useTheme from '../../hooks/UseTheme';
-import { FlatList } from 'react-native-gesture-handler';
 
 interface Props {
     options: Array<{ id: number; nome: string; }>;
@@ -9,6 +8,7 @@ interface Props {
     titulo: string;
     minSelected: number;
     style?: any
+    horizontal?: boolean;
 }
 
 export default function CustomOptionsInput(props: Props) {
@@ -103,7 +103,7 @@ export default function CustomOptionsInput(props: Props) {
             </View>
             <ScrollView
                 style={styles.optionsContainer}
-                horizontal={true}
+                horizontal={props.horizontal}
             >
                 {optionsButtons()}
             </ScrollView>
