@@ -2,24 +2,24 @@ import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Alert, ScrollView, Image } from 'react-native';
 import Nav from '../../components/Nav';
 import useTheme from '../../hooks/UseTheme';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import CustomTextInput from '../../components/inputs/CustomTextInput';
 import CustomDateInput from '../../components/inputs/CustomDateInput';
 import CustomLocationInput from '../../components/inputs/CustomLocationInput';
 import CustomTextBoxInput from '../../components/inputs/CustomTextBoxInput';
 import CustomOptionsInput from '../../components/inputs/CustomOptionsInput';
+import Usuario from '../../interface/Usuario';
 
 interface Props {
     navigation: any;
+    usuario: Usuario
 }
 
-export default function EdicaoProfile({ navigation }: Props) {
-    const [usuarioId, setUsuarioId] = useState<string>('');
-    const [nome, setNome] = useState<string>('');
-    const [dataNasc, setDataNasc] = useState<Date>(new Date());
-    const [profissao, setProfissao] = useState<string>('');
-    const [escolaridade, setEscolaridade] = useState<string>('');
-    const [desc, setDesc] = useState<string>('');
+export default function EdicaoProfile({ navigation, usuario }: Props) {
+    const [nome, setNome] = useState<string>(usuario.nome);
+    const [dataNasc, setDataNasc] = useState<Date>(new Date(usuario.datanascimento));
+    const [profissao, setProfissao] = useState<string>(usuario.profissao);
+    const [escolaridade, setEscolaridade] = useState<string>(usuario.profissao);
+    const [desc, setDesc] = useState<string>(usuario.descricao);
     const [gostos, setGostos] = useState<Array<{ id: number; nome: string; }>>([]);
     const [interesses, setInteresses] = useState<Array<{ id: number; nome: string; }>>([]);
     const [gostosSelecionados, setGostosSelecionados] = useState<Array<{ nome: string, id: number }>>([]);
@@ -27,29 +27,6 @@ export default function EdicaoProfile({ navigation }: Props) {
     const [showGostos, setShowGostos] = useState<boolean>(false);
     const [showInteresses, setShowInteresses] = useState<boolean>(false);
     const { theme } = useTheme();
-
-    const getUsuario = async () => {
-        let idUsuario = await AsyncStorage.getItem('idUsuario');
-        if (idUsuario === null) {
-            idUsuario = '45';
-            setUsuarioId('45');
-        } else {
-            setUsuarioId(idUsuario);
-        }
-
-        const response = await fetch(`https://finder-app-back.vercel.app/usuario/getUmUsuario?id=${idUsuario}`);
-        const data = await response.json();
-        if (response.status === 200) {
-            const usuario = data.Usuario;
-            setNome(usuario.nome);
-            setDataNasc(usuario.datanascimento);
-            setProfissao(usuario.profissao);
-            setEscolaridade(usuario.escolaridade);
-            setDesc(usuario.descricao)
-        } else {
-            Alert.alert('Erro: ', data.msg);
-        }
-    };
 
     const getGostos = async () => {
         const response = await fetch('https://finder-app-back.vercel.app/gosto/lista');
@@ -76,7 +53,6 @@ export default function EdicaoProfile({ navigation }: Props) {
     };
 
     useEffect(() => {
-        getUsuario();
         getGostos();
         getInteresses();
     }, []);
@@ -89,7 +65,7 @@ export default function EdicaoProfile({ navigation }: Props) {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                'id': usuarioId,
+                'id': usuario.id,
                 'nome': nome,
                 'dataNasc': dataNasc.toISOString,
                 'profissao': profissao,
@@ -130,7 +106,7 @@ export default function EdicaoProfile({ navigation }: Props) {
             display: 'flex',
             flexDirection: 'row',
             justifyContent: 'space-between',
-            width: '74%',
+            width: '47%',
         },
         inputText: {
             width: '80%',
@@ -197,7 +173,7 @@ export default function EdicaoProfile({ navigation }: Props) {
             position: 'absolute',
             width: '100%',
             bottom: 0,
-        }
+        },
     });
 
     return (
@@ -224,7 +200,7 @@ export default function EdicaoProfile({ navigation }: Props) {
                     </View>
 
                     <View style={styles.inputDesc}>
-                        <CustomTextBoxInput setText={setDesc} placeholder={desc} />
+                        <CustomTextBoxInput setText={setDesc} placeholder="Descrição" text={desc} />
                     </View>
                 </View>
 

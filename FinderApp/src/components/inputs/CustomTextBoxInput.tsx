@@ -8,6 +8,7 @@ interface Props {
     secure?: boolean;
     obrigatorio?: boolean;
     errMsg?: string;
+    text?: string
 }
 
 export default function CustomTextBoxInput(props: Props) {
@@ -15,16 +16,17 @@ export default function CustomTextBoxInput(props: Props) {
     const [touched, setTouched] = useState<boolean>(false);
     const [isFocused, setIsFocused] = useState<boolean>(false);
     const [erroMsg, setErroMsg] = useState<string>();
-    const [text, setText] = useState<string>();
+    const [text, setText] = useState<string>(props.text ? props.text : '');
 
-    if (props.obrigatorio) {
-        useEffect(() => {
+    useEffect(() => {
+        console.log('aaaaaaaaaaaaaaaaa');
+        console.log(text);
+
+        if (props.obrigatorio) {
             if (isFocused) {
                 setTouched(true);
             }
-        }, [isFocused]);
 
-        useEffect(() => {
             if (touched && props.errMsg) {
                 setErroMsg(props.errMsg);
             } else if (touched && !text) {
@@ -32,8 +34,8 @@ export default function CustomTextBoxInput(props: Props) {
             } else {
                 setErroMsg('');
             }
-        }, [text, isFocused]);
-    }
+        }
+    }, [isFocused, props.errMsg, props.obrigatorio, text, touched]);
 
     const styles = StyleSheet.create({
         view: {

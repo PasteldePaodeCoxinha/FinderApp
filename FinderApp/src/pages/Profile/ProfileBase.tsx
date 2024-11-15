@@ -2,52 +2,24 @@ import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity, Alert } from 'react-native';
 import Nav from '../../components/Nav';
 import useTheme from '../../hooks/UseTheme';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import CustomImageInput from '../../components/inputs/CustomImageInput';
+import Usuario from '../../interface/Usuario';
 
 interface Props {
     navigation: any;
+    usuario: Usuario
 }
 
-export default function ProfileBase({ navigation }: Props) {
-    const [usuarioId, setUsuarioId] = useState<number>(0);
-    const [nome, setNome] = useState<string>('');
+export default function ProfileBase({ navigation, usuario }: Props) {
     const [idade, setIdade] = useState<number>(0);
     const [img, setImg] = useState<string>('');
-    const [desc, setDesc] = useState<string>('');
     const { theme } = useTheme();
 
-    const getUsuario = async () => {
-        let idUsuario = await AsyncStorage.getItem('idUsuario');
-        if (idUsuario === null) {
-            idUsuario = '45';
-        }
-        const response = await fetch(`https://finder-app-back.vercel.app/usuario/getUmUsuario?id=${idUsuario}`);
-        const data = await response.json();
-        if (response.status === 200) {
-            const usuario = data.Usuario;
-
-            setUsuarioId(usuario.id);
-            setNome(usuario.nome);
-
-            let timeDiff = Math.abs(Date.now() - (new Date(usuario.datanascimento)).getTime());
-            let age = Math.floor((timeDiff / (1000 * 3600 * 24)) / 365.25);
-            setIdade(age);
-
-            setDesc(usuario.descricao);
-            setImg(usuario.imgperfil);
-        } else {
-            Alert.alert('Erro: ', data.msg);
-        }
-    };
-
     useEffect(() => {
-        getUsuario();
-    }, []);
-
-    navigation.addListener('didFocus', () => {
-        getUsuario()
-    });
+        let timeDiff = Math.abs(Date.now() - (new Date(usuario.datanascimento)).getTime());
+        let age = Math.floor((timeDiff / (1000 * 3600 * 24)) / 365.25);
+        setIdade(age);
+    }, [usuario.datanascimento]);
 
     useEffect(() => {
         const mudarImgPerfil = async () => {
@@ -59,7 +31,7 @@ export default function ProfileBase({ navigation }: Props) {
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({
-                        'id': usuarioId,
+                        'id': usuario.id,
                         'imgperfil': img,
                     }),
                 });
@@ -76,7 +48,7 @@ export default function ProfileBase({ navigation }: Props) {
         };
 
         mudarImgPerfil();
-    }, [img, usuarioId]);
+    }, [img, usuario.id]);
 
     const styles = StyleSheet.create({
         pagina: {
@@ -134,8 +106,8 @@ export default function ProfileBase({ navigation }: Props) {
     return (
         <View style={styles.pagina}>
             <View style={styles.informacoesBasi}>
-                <CustomImageInput setImage={setImg} defaultImage={img} />
-                <Text style={styles.textoInfo}>{nome}, {idade}</Text>
+                <CustomImageInput setImage={setImg} defaultImage={usuario.imgperfil} />
+                <Text style={styles.textoInfo}>{usuario.nome}, {idade}</Text>
             </View>
 
             <View style={styles.containerBotoesAcoes}>
@@ -149,7 +121,7 @@ export default function ProfileBase({ navigation }: Props) {
 
             <View style={styles.containerDesc}>
                 <Text style={styles.desc}>
-                    {desc}
+                    {usuario.descricao}
                 </Text>
             </View>
 
