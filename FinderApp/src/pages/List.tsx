@@ -102,8 +102,7 @@ export default function List({ navigation }: Props) {
         if (response.ok) {
             return data.localizacao as Localizacao;
         } else {
-            console.log("Falha buscando endereco do usuário:", data.msg);
-            // Alert.alert("Falha buscando endereco do usuário:", data.msg);
+            Alert.alert("Falha buscando endereco do usuário:", data.msg);
         }
         return {} as Localizacao;
     }
@@ -118,11 +117,12 @@ export default function List({ navigation }: Props) {
             const tmpUsuarios = data.usuarios;
             for (let i = 0; i < tmpUsuarios.length; i++) {
                 tmpUsuarios[i].localizacao = await getEndereco(tmpUsuarios[i]);
+                tmpUsuarios[i].match = await (checaMatch(tmpUsuarios[i]));
             }
 
             if (proprioId) {
                 setUsuarios(
-                    tmpUsuarios.filter((u: any) => u.id != parseInt(proprioId))
+                    tmpUsuarios.filter((u: any) => u.id != parseInt(proprioId) && !u.match)
                 );
             } else setUsuarios(data.usuarios);
         } else {

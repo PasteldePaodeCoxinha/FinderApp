@@ -97,7 +97,6 @@ export default function Cadastro({ navigation }: Props) {
         const coords = await CoordEndereco();
         if (coords == undefined) return;
 
-        console.log("coords", coords);
         const response = await fetch("https://finder-app-back.vercel.app/localizacao/cadastrar", {
             method: "POST",
             headers: {
@@ -120,7 +119,6 @@ export default function Cadastro({ navigation }: Props) {
 
         const data = await response.json();
         if (response.ok) {
-            console.log(data);
             setEtapa("GostosInteresses");
         } else {
             Alert.alert("Falha ao cadastrar endereço:", data.msg);

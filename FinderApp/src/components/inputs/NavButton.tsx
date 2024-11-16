@@ -4,6 +4,7 @@ import useTheme from '../../hooks/UseTheme';
 
 interface Props {
     image: any;
+    destacar?: boolean;
     callback: (_: any) => void;
 }
 
@@ -18,8 +19,8 @@ export default function NavButton(props: Props) {
         touchable: {
             padding: 8,
             borderRadius: 100,
-            borderColor: theme.colors.border,
-            borderWidth: 2,
+            borderColor: props.destacar ? theme.colors.primary : theme.colors.border,
+            borderWidth: props.destacar ? 3 : 2,
         },
     });
 
