@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import useTheme from '../../hooks/UseTheme';
 
@@ -9,7 +9,7 @@ interface Props {
     minSelected: number;
     style?: any
     horizontal?: boolean;
-    selected?: Array<{ id: number; nome: string; }>
+    selected?: Array<string>
 }
 
 export default function CustomOptionsInput(props: Props) {
@@ -18,23 +18,31 @@ export default function CustomOptionsInput(props: Props) {
         id: number,
         nome: string,
         selected: boolean
-    }>>(props.options.map((o) => {
-        return {
-            id: o.id,
-            nome: o.nome,
-            selected: false,
-        };
-    }));
-
-    useEffect(() => {
-        if (props.selected) {
-            const selecionadosLista = props.selected.map(i => i.nome);
-            const opcoesSelecionadas = selectedOptions.filter((s) => {
-                return selecionadosLista.some(f => f === s.nome);
-            });
-            console.log(opcoesSelecionadas);
-        }
-    }, [props.selected, selectedOptions]);
+    }>>(props.selected === undefined ?
+        (props.options.map((o) => {
+            return {
+                id: o.id,
+                nome: o.nome,
+                selected: false,
+            };
+        }))
+        :
+        (props.options.map((o) => {
+            if (props.selected?.includes(o.nome)) {
+                return {
+                    id: o.id,
+                    nome: o.nome,
+                    selected: true,
+                };
+            } else {
+                return {
+                    id: o.id,
+                    nome: o.nome,
+                    selected: false,
+                };
+            }
+        }))
+    );
 
     const styles = StyleSheet.create({
         input: {

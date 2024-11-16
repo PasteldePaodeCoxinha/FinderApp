@@ -251,7 +251,7 @@ export default function EdicaoProfile({ navigation, usuario }: Props) {
                             setOptions={setGostosSelecionados}
                             titulo="Quais são seus gostos?"
                             minSelected={5}
-                            selected={gostosSelecionados}
+                            selected={gostosSelecionados.map(g => g.nome)}
                         />
                     ) : (
                         <TouchableOpacity style={styles.touchBotaoShowInteGos} onPress={() => { setShowGostos(true); }}>
@@ -270,7 +270,7 @@ export default function EdicaoProfile({ navigation, usuario }: Props) {
                             setOptions={setInteressesSelecionados}
                             titulo="Quais são seus interesses?"
                             minSelected={3}
-                            selected={interessesSelecionados}
+                            selected={interessesSelecionados.map(i => i.nome)}
                         />
                     ) : (
                         <TouchableOpacity style={styles.touchBotaoShowInteGos} onPress={() => { setShowInteresses(true); }}>
