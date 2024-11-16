@@ -216,8 +216,8 @@ export default function EdicaoProfile({ navigation, usuario }: Props) {
                     </View>
                 </View>
 
-                {/* <View style={styles.inputGostosInteresses}> */}
-                {/* {((gostos.length > 0) && showGostos) ? (
+                <View style={styles.inputGostosInteresses}>
+                {((gostos.length > 0) && showGostos) ? (
                         <CustomOptionsInput
                             options={gostos}
                             horizontal={true}
@@ -252,8 +252,8 @@ export default function EdicaoProfile({ navigation, usuario }: Props) {
                             />
                             <Text style={styles.textoShowInteGos}>Interesses</Text>
                         </TouchableOpacity>
-                    )} */}
-                {/* </View> */}
+                    )}
+                </View>
 
                 <TouchableOpacity style={styles.botaoSalvar} onPress={enviarReqEditarUsuario}>
                     <Text style={styles.botaoSalvarTexto}>Salvar</Text>

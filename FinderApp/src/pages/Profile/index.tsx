@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import ProfileBase from './ProfileBase';
 import EdicaoProfile from './EdicaoProfile';
@@ -11,7 +11,7 @@ const Stack = createNativeStackNavigator();
 export default function Profile() {
     const [usuario, setUsuario] = useState<Usuario>();
 
-    const getUsuario = useCallback(async () => {
+    const getUsuario = async () => {
         let idUsuario = await AsyncStorage.getItem('idUsuario');
         if (idUsuario === null) {
             idUsuario = '47';
@@ -23,11 +23,11 @@ export default function Profile() {
         } else {
             Alert.alert('Erro: ', data.msg);
         }
-    }, []);
+    };
 
     useEffect(() => {
         getUsuario();
-    }, [getUsuario]);
+    }, []);
 
     return (
         <Stack.Navigator>
@@ -35,14 +35,14 @@ export default function Profile() {
                 name="ProfileBase"
                 options={{ headerShown: false }}
             >
-                {(props) => <ProfileBase {...props} usuario={usuario ? usuario : { datanascimento: '', descricao: '', email: '', escolaridade: '', id: 0, imgperfil: '', nome: '', profissao: '', senha: '' }} />}
+                {(props) => <ProfileBase {...props} getUsuario={getUsuario} usuario={usuario ? usuario : { datanascimento: '', descricao: '', email: '', escolaridade: '', id: 0, imgperfil: '', nome: '', profissao: '', senha: '' }} />}
             </Stack.Screen>
 
             <Stack.Screen
                 name="EdicaoProfile"
                 options={{ headerShown: false }}
             >
-                {(props) => <EdicaoProfile {...props} usuario={usuario ? usuario : { datanascimento: '', descricao: '', email: '', escolaridade: '', id: 0, imgperfil: '', nome: '', profissao: '', senha: '' }}/>}
+                {(props) => <EdicaoProfile {...props} usuario={usuario ? usuario : { datanascimento: '', descricao: '', email: '', escolaridade: '', id: 0, imgperfil: '', nome: '', profissao: '', senha: '' }} />}
             </Stack.Screen>
         </Stack.Navigator>
     );

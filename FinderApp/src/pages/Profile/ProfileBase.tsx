@@ -7,10 +7,11 @@ import Usuario from '../../interface/Usuario';
 
 interface Props {
     navigation: any;
-    usuario: Usuario
+    usuario: Usuario;
+    getUsuario: () => Promise<void>
 }
 
-export default function ProfileBase({ navigation, usuario }: Props) {
+export default function ProfileBase({ navigation, usuario, getUsuario }: Props) {
     const [idade, setIdade] = useState<number>(0);
     const [img, setImg] = useState<string>('');
     const { theme } = useTheme();
@@ -50,6 +51,17 @@ export default function ProfileBase({ navigation, usuario }: Props) {
 
         mudarImgPerfil();
     }, [img, usuario.id, usuario]);
+
+    useEffect(() => {
+        const atualizarUsuario = navigation.addListener('focus', () => {
+            getUsuario();
+            let timeDiff = Math.abs(Date.now() - (new Date(usuario.datanascimento)).getTime());
+            let age = Math.floor((timeDiff / (1000 * 3600 * 24)) / 365.25);
+            setIdade(age);
+            setImg(usuario.imgperfil);
+        });
+        return atualizarUsuario;
+    }, [navigation, getUsuario, usuario.datanascimento, usuario.imgperfil]);
 
     const styles = StyleSheet.create({
         pagina: {
