@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import useTheme from '../../hooks/UseTheme';
 
@@ -9,6 +9,7 @@ interface Props {
     minSelected: number;
     style?: any
     horizontal?: boolean;
+    selected?: Array<{ id: number; nome: string; }>
 }
 
 export default function CustomOptionsInput(props: Props) {
@@ -24,6 +25,16 @@ export default function CustomOptionsInput(props: Props) {
             selected: false,
         };
     }));
+
+    useEffect(() => {
+        if (props.selected) {
+            const selecionadosLista = props.selected.map(i => i.nome);
+            const opcoesSelecionadas = selectedOptions.filter((s) => {
+                return selecionadosLista.some(f => f === s.nome);
+            });
+            console.log(opcoesSelecionadas);
+        }
+    }, [props.selected, selectedOptions]);
 
     const styles = StyleSheet.create({
         input: {
@@ -77,8 +88,9 @@ export default function CustomOptionsInput(props: Props) {
     }
 
     function optionsButtons() {
-        return selectedOptions.map((o) => (
+        return selectedOptions.map((o, i) => (
             <TouchableOpacity
+                key={i}
                 style={[styles.optionButton, {
                     borderColor: (o.selected ? theme.colors.primary : theme.colors.border),
                 }]}

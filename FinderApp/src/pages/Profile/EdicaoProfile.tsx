@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Alert, ScrollView, Image } from 'react-native';
 import Nav from '../../components/Nav';
 import useTheme from '../../hooks/UseTheme';
@@ -22,40 +22,66 @@ export default function EdicaoProfile({ navigation, usuario }: Props) {
     const [desc, setDesc] = useState<string>(usuario.descricao);
     const [gostos, setGostos] = useState<Array<{ id: number; nome: string; }>>([]);
     const [interesses, setInteresses] = useState<Array<{ id: number; nome: string; }>>([]);
-    const [gostosSelecionados, setGostosSelecionados] = useState<Array<{ nome: string, id: number }>>([]);
+    const [gostosSelecionados, setGostosSelecionados] = useState<Array<{ id: number, nome: string }>>([]);
     const [interessesSelecionados, setInteressesSelecionados] = useState<Array<{ nome: string, id: number }>>([]);
     const [showGostos, setShowGostos] = useState<boolean>(false);
     const [showInteresses, setShowInteresses] = useState<boolean>(false);
     const { theme } = useTheme();
 
-    const getGostos = async () => {
-        const response = await fetch('https://finder-app-back.vercel.app/gosto/lista');
+    const getGostos = useCallback(async () => {
+        try {
+            const response = await fetch('https://finder-app-back.vercel.app/gosto/lista');
 
-        const data = await response.json();
-        if (response.ok) {
-            setGostos(data.gostos);
-            setGostosSelecionados(data.gostos);
-        } else {
-            Alert.alert('Falha buscando gostos:', data.msg);
+            const data = await response.json();
+            if (response.ok) {
+                setGostos(data.gostos);
+
+                const response2 = await fetch(`https://finder-app-back.vercel.app/usuario/getGostosUsuario?usuarioId=${usuario.id}`);
+                const data2 = await response2.json();
+
+                if (response2.ok) {
+                    setGostosSelecionados(data2.Gostos);
+                } else {
+                    Alert.alert('Erro ao pegar gostos do usuário: ', data.msg);
+                }
+            } else {
+                Alert.alert('Falha buscando gostos:', data.msg);
+            }
+        } catch (error) {
+            console.log(error);
+            Alert.alert((error as Error).message);
         }
-    };
+    }, [usuario.id]);
 
-    const getInteresses = async () => {
-        const response = await fetch('https://finder-app-back.vercel.app/interesse/lista');
+    const getInteresses = useCallback( async () => {
+        try {
+            const response = await fetch('https://finder-app-back.vercel.app/interesse/lista');
 
-        const data = await response.json();
-        if (response.ok) {
-            setInteresses(data.interesses);
-            setInteressesSelecionados(data.interesses);
-        } else {
-            Alert.alert('Falha buscando interesses:', data.msg);
+            const data = await response.json();
+            if (response.ok) {
+                setInteresses(data.interesses);
+
+                const response2 = await fetch(`https://finder-app-back.vercel.app/usuario/getInteressesUsuario?usuarioId=${usuario.id}`);
+                const data2 = await response2.json();
+
+                if (response2.ok) {
+                    setInteressesSelecionados(data2.Interesses);
+                } else {
+                    Alert.alert('Erro ao pegar interesses do usuário: ', data.msg);
+                }
+            } else {
+                Alert.alert('Falha buscando interesses:', data.msg);
+            }
+        } catch (error) {
+            console.log(error);
+            Alert.alert((error as Error).message);
         }
-    };
+    }, [usuario.id]);
 
     useEffect(() => {
         getGostos();
         getInteresses();
-    }, []);
+    }, [getGostos, getInteresses]);
 
     const editarInfoUsuario = async () => {
         try {
@@ -217,7 +243,7 @@ export default function EdicaoProfile({ navigation, usuario }: Props) {
                 </View>
 
                 <View style={styles.inputGostosInteresses}>
-                {((gostos.length > 0) && showGostos) ? (
+                    {((gostos.length > 0) && showGostos) ? (
                         <CustomOptionsInput
                             options={gostos}
                             horizontal={true}
@@ -225,6 +251,7 @@ export default function EdicaoProfile({ navigation, usuario }: Props) {
                             setOptions={setGostosSelecionados}
                             titulo="Quais são seus gostos?"
                             minSelected={5}
+                            selected={gostosSelecionados}
                         />
                     ) : (
                         <TouchableOpacity style={styles.touchBotaoShowInteGos} onPress={() => { setShowGostos(true); }}>
@@ -243,6 +270,7 @@ export default function EdicaoProfile({ navigation, usuario }: Props) {
                             setOptions={setInteressesSelecionados}
                             titulo="Quais são seus interesses?"
                             minSelected={3}
+                            selected={interessesSelecionados}
                         />
                     ) : (
                         <TouchableOpacity style={styles.touchBotaoShowInteGos} onPress={() => { setShowInteresses(true); }}>
