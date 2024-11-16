@@ -56,7 +56,7 @@ export default function Cadastro({ navigation }: Props) {
                 };
             }
         } else {
-            Alert.alert("Falha ao cadastrar:", data.msg);
+            Alert.alert("Endereço não encontrado:", data.msg);
         }
         return {
             lat: 0,

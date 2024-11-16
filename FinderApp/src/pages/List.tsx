@@ -100,7 +100,7 @@ export default function List({ navigation }: Props) {
 
         const data = await response.json();
         if (response.ok) {
-            return data as Localizacao;
+            return data.localizacao as Localizacao;
         } else {
             console.log("Falha buscando endereco do usuário:", data.msg);
             // Alert.alert("Falha buscando endereco do usuário:", data.msg);
@@ -205,9 +205,6 @@ export default function List({ navigation }: Props) {
             return deg * (Math.PI / 180);
         }
 
-        console.log("enderecoLogado", enderecoLogado);
-        console.log("usuario.localizacao", usuario.localizacao);
-
         const lat1: number = enderecoLogado.lati;
         const long1: number = enderecoLogado.longi;
         const lat2: number = usuario.localizacao.lati;
@@ -234,7 +231,7 @@ export default function List({ navigation }: Props) {
                     source={{ uri: imgperfil }}
                 >
                     <View style={styles.desc}>
-                        <Text style={styles.descText}>{`${nome}, ${calcularIdade(usuarios[1])}, ${calcularDistancia(usuarios[1])}`}</Text>
+                        <Text style={styles.descText}>{`${nome}, ${calcularIdade(usuarios[1])}, ${calcularDistancia(usuarios[1]).toFixed(0)}Km`}</Text>
                         <View style={styles.bio}>
                             <Text style={styles.bioText}>{descricao}</Text>
                         </View>
@@ -256,7 +253,7 @@ export default function List({ navigation }: Props) {
                 <ListSwipableImage
                     onSwipe={proximoUsuario}
                     imageSource={imgperfil}
-                    desc={`${nome}, ${calcularIdade(usuarios[0])}, ${calcularDistancia(usuarios[0])}`}
+                    desc={`${nome}, ${calcularIdade(usuarios[0])}, ${calcularDistancia(usuarios[0]).toFixed(0)}Km`}
                     bio={descricao}
                 />
             );
