@@ -58,21 +58,33 @@ export default function EdicaoProfile({ navigation, usuario }: Props) {
     }, []);
 
     const editarInfoUsuario = async () => {
-        await fetch('https://finder-app-back.vercel.app/usuario/editar', {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                'id': usuario.id,
-                'nome': nome,
-                'dataNasc': dataNasc.toISOString,
-                'profissao': profissao,
-                'escolaridade': escolaridade,
-                'descricao': desc,
-            }),
-        });
+        try {
+            const response = await fetch('https://finder-app-back.vercel.app/usuario/editar', {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    'id': usuario.id,
+                    'nome': nome,
+                    'datanascimento': dataNasc.toISOString(),
+                    'profissao': profissao,
+                    'escolaridade': escolaridade,
+                    'descricao': desc,
+                }),
+            });
+
+            const data = await response.json();
+            if (response.ok) {
+                console.log('Imagem de perfil alterada');
+            } else {
+                Alert.alert('Falha ao cadastrar:', data.msg);
+            }
+        } catch (error) {
+            console.log(error);
+            Alert.alert((error as Error).message);
+        }
     };
 
     const enviarReqEditarUsuario = () => {

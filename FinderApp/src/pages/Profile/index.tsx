@@ -9,7 +9,7 @@ import Usuario from '../../interface/Usuario';
 const Stack = createNativeStackNavigator();
 
 export default function Profile() {
-    const [usuario, setUsuario] = useState<Usuario>({ datanascimento: '', descricao: '', email: '', escolaridade: '', id: 0, imgperfil: '', nome: '', profissao: '', senha: '' });
+    const [usuario, setUsuario] = useState<Usuario>();
 
     const getUsuario = useCallback(async () => {
         let idUsuario = await AsyncStorage.getItem('idUsuario');
@@ -35,14 +35,14 @@ export default function Profile() {
                 name="ProfileBase"
                 options={{ headerShown: false }}
             >
-                {(props) => <ProfileBase {...props} usuario={usuario} />}
+                {(props) => <ProfileBase {...props} usuario={usuario ? usuario : { datanascimento: '', descricao: '', email: '', escolaridade: '', id: 0, imgperfil: '', nome: '', profissao: '', senha: '' }} />}
             </Stack.Screen>
 
             <Stack.Screen
                 name="EdicaoProfile"
                 options={{ headerShown: false }}
             >
-                {(props) => <EdicaoProfile {...props} usuario={usuario}/>}
+                {(props) => <EdicaoProfile {...props} usuario={usuario ? usuario : { datanascimento: '', descricao: '', email: '', escolaridade: '', id: 0, imgperfil: '', nome: '', profissao: '', senha: '' }}/>}
             </Stack.Screen>
         </Stack.Navigator>
     );

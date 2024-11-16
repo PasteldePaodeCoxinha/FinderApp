@@ -19,9 +19,6 @@ export default function CustomTextBoxInput(props: Props) {
     const [text, setText] = useState<string>(props.text ? props.text : '');
 
     useEffect(() => {
-        console.log('aaaaaaaaaaaaaaaaa');
-        console.log(text);
-
         if (props.obrigatorio) {
             if (isFocused) {
                 setTouched(true);
