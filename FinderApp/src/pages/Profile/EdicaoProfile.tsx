@@ -18,7 +18,7 @@ export default function EdicaoProfile({ navigation, usuario }: Props) {
     const [nome, setNome] = useState<string>(usuario.nome);
     const [dataNasc, setDataNasc] = useState<Date>(new Date(usuario.datanascimento));
     const [profissao, setProfissao] = useState<string>(usuario.profissao);
-    const [escolaridade, setEscolaridade] = useState<string>(usuario.profissao);
+    const [escolaridade, setEscolaridade] = useState<string>(usuario.escolaridade);
     const [desc, setDesc] = useState<string>(usuario.descricao);
     const [gostos, setGostos] = useState<Array<{ id: number; nome: string; }>>([]);
     const [interesses, setInteresses] = useState<Array<{ id: number; nome: string; }>>([]);

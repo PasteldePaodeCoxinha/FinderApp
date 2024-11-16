@@ -11,6 +11,7 @@ interface Props {
 }
 
 export default function ProfileBase({ navigation, usuario }: Props) {
+    const [usuarioLocal, setUsuarioLocal] = useState(usuario);
     const [idade, setIdade] = useState<number>(0);
     const [img, setImg] = useState<string>('');
     const { theme } = useTheme();
@@ -39,6 +40,8 @@ export default function ProfileBase({ navigation, usuario }: Props) {
                 const data = await response.json();
                 if (response.ok) {
                     console.log('Imagem de perfil alterada');
+
+                    setUsuarioLocal({...usuario, imgperfil: img});
                 } else {
                     Alert.alert('Falha ao cadastrar:', data.msg);
                 }
@@ -48,7 +51,7 @@ export default function ProfileBase({ navigation, usuario }: Props) {
         };
 
         mudarImgPerfil();
-    }, [img, usuario.id]);
+    }, [img, usuario.id, usuario]);
 
     const styles = StyleSheet.create({
         pagina: {
