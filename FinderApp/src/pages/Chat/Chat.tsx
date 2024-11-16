@@ -205,7 +205,7 @@ export default function Chat({ navigation }: Props) {
         setInterval(() => {
             mensagensChat();
         }, 1000);
-    }, []);
+    }, [chat]);
 
     function ListarMensagens() {
         return mensagens.map((m, index) => (

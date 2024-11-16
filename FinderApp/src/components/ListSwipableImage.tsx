@@ -1,15 +1,16 @@
-import { ImageBackground, Animated, StyleSheet, Text, View, Dimensions } from "react-native";
-import { GestureHandlerRootView, PanGestureHandler, PanGestureHandlerGestureEvent, State } from "react-native-gesture-handler";
-import useTheme from "../hooks/UseTheme";
+import React from 'react';
+import { ImageBackground, Animated, StyleSheet, Text, View, Dimensions } from 'react-native';
+import { GestureHandlerRootView, PanGestureHandler, PanGestureHandlerGestureEvent, State } from 'react-native-gesture-handler';
+import useTheme from '../hooks/UseTheme';
 
-const { width } = Dimensions.get("window");
+const { width } = Dimensions.get('window');
 
 interface Props {
     imageSource: any;
     desc: string;
     bio: string;
-    onSwipe: (direction: "left" | "right") => void;
-};
+    onSwipe: (direction: 'left' | 'right') => void;
+}
 
 export default function ListSwipableImage(props: Props) {
     const { theme } = useTheme();
@@ -21,16 +22,16 @@ export default function ListSwipableImage(props: Props) {
         card: {
             width: cardWidth,
             height: cardHeight,
-            justifyContent: "center",
-            alignItems: "center",
+            justifyContent: 'center',
+            alignItems: 'center',
         },
         backgroundImage: {
             width: cardWidth,
             height: cardHeight,
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "flex-end",
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'flex-end',
             paddingVertical: 50,
             gap: 10,
             borderRadius: 15,
@@ -40,20 +41,20 @@ export default function ListSwipableImage(props: Props) {
         },
         descText: {
             fontSize: 28,
-            textAlign: "center",
+            textAlign: 'center',
             color: theme.colors.text,
-            textShadowColor: "white",
+            textShadowColor: 'white',
             textShadowOffset: {
                 width: 0,
-                height: 0
+                height: 0,
             },
             textShadowRadius: 5,
         },
         bio: {
             backgroundColor: theme.colors.border,
-            maxWidth: "90%",
+            maxWidth: '90%',
             borderRadius: 15,
-            padding: 10
+            padding: 10,
         },
         bioText: {
             fontSize: 24,
@@ -79,14 +80,14 @@ export default function ListSwipableImage(props: Props) {
                     toValue: width,
                     duration: 300,
                     useNativeDriver: true,
-                }).start(() => props.onSwipe("right"));
+                }).start(() => props.onSwipe('right'));
             } else if (nativeEvent.translationX < -threshold) {
                 // Swiped left
                 Animated.timing(translateX, {
                     toValue: -width,
                     duration: 300,
                     useNativeDriver: true,
-                }).start(() => props.onSwipe("left"));
+                }).start(() => props.onSwipe('left'));
             } else {
                 // Reset position
                 Animated.spring(translateX, {

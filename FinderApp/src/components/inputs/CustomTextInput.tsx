@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
-import { StyleSheet, Text, TextInput, View } from "react-native";
-import useTheme from "../../hooks/UseTheme";
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, Text, TextInput, View } from 'react-native';
+import useTheme from '../../hooks/UseTheme';
 
 interface Props {
     setText: (text: string) => void;
@@ -33,29 +33,29 @@ export default function CustomTextInput(props: Props) {
             } else if (touched && !(props.value ? props.value : text)) {
                 setErroMsg("Preencha o campo");
             } else {
-                setErroMsg("");
+                setErroMsg('');
             }
-        }, [(props.value ? props.value : text), isFocused]);
+        }, [props.value, text, isFocused]);
     }
 
     const styles = StyleSheet.create({
         view: {
-            display: "flex",
-            alignItems: "center"
+            display: 'flex',
+            alignItems: 'center',
         },
         input: {
             height: 40,
-            minWidth: "100%",
+            minWidth: '100%',
             borderColor: (isFocused ? theme.colors.primary : theme.colors.border),
             borderWidth: (isFocused ? 3 : 2),
             borderRadius: 15,
             paddingHorizontal: 10,
-            backgroundColor: "white",
-            color: theme.colors.text
+            backgroundColor: 'white',
+            color: theme.colors.text,
         },
         textoErr: {
-            color: theme.colors.primary
-        }
+            color: theme.colors.primary,
+        },
     });
 
     return (
@@ -63,11 +63,11 @@ export default function CustomTextInput(props: Props) {
             <TextInput
                 style={styles.input}
                 placeholder={props.placeholder}
-                onChangeText={(txt: string) => { setText(txt); props.setText(txt) }}
+                onChangeText={(txt: string) => { props.setText(txt); setText(txt); }}
                 secureTextEntry={props.secure}
                 onFocus={() => setIsFocused(true)}
                 onBlur={() => setIsFocused(false)}
-                value={(props.value ? props.value : text)}
+                value={props.value}
             />
             {erroMsg && <Text style={styles.textoErr}>{erroMsg}</Text>}
         </View>

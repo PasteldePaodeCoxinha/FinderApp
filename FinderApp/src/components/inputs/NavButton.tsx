@@ -1,10 +1,11 @@
-import { Image, StyleSheet, TouchableOpacity } from "react-native";
-import useTheme from "../../hooks/UseTheme";
+import React from 'react';
+import { Image, StyleSheet, TouchableOpacity } from 'react-native';
+import useTheme from '../../hooks/UseTheme';
 
 interface Props {
     image: any;
     callback: (_: any) => void;
-};
+}
 
 export default function NavButton(props: Props) {
     const { theme } = useTheme();
@@ -18,7 +19,7 @@ export default function NavButton(props: Props) {
             padding: 8,
             borderRadius: 100,
             borderColor: theme.colors.border,
-            borderWidth: 2
+            borderWidth: 2,
         },
     });
 
@@ -30,7 +31,7 @@ export default function NavButton(props: Props) {
             <Image
                 style={styles.image}
                 source={props.image}
-            ></Image>
+            />
         </TouchableOpacity>
     );
 }

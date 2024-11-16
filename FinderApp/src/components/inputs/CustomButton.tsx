@@ -1,5 +1,6 @@
-import { StyleSheet, Text, TouchableOpacity } from "react-native";
-import useTheme from "../../hooks/UseTheme";
+import React from 'react';
+import { StyleSheet, Text, TouchableOpacity } from 'react-native';
+import useTheme from '../../hooks/UseTheme';
 
 interface Props {
     onPress: () => void;
@@ -12,10 +13,10 @@ export default function CustomButton(props: Props) {
     const styles = StyleSheet.create({
         btnContinuar: {
             backgroundColor: theme.colors.primary,
-            margin: "auto",
+            margin: 'auto',
             paddingHorizontal: 20,
             paddingVertical: 5,
-            textAlign: "center",
+            textAlign: 'center',
             borderTopLeftRadius: 35,
             borderTopRightRadius: 25,
             borderBottomLeftRadius: 25,
@@ -23,8 +24,8 @@ export default function CustomButton(props: Props) {
         },
         btnTexto: {
             color: theme.colors.text,
-            fontSize: 24
-        }
+            fontSize: 24,
+        },
     });
 
     return (

@@ -1,17 +1,19 @@
-import { StyleSheet, View } from "react-native";
-import NavButton from "./inputs/NavButton";
+import React from 'react';
+import { StyleSheet, View } from 'react-native';
+import NavButton from './inputs/NavButton';
 
 interface Props {
-    navigation: any
+    navigation: any;
+    style?: any;
 }
 
-export default function Nav({ navigation }: Props) {
+export default function Nav({ navigation, style }: Props) {
     const styles = StyleSheet.create({
         nav: {
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "space-around",
-            backgroundColor: "white",
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'space-around',
+            backgroundColor: 'white',
             paddingVertical: 5,
             paddingHorizontal: 25,
         },
@@ -19,7 +21,7 @@ export default function Nav({ navigation }: Props) {
 
     return (
         <View
-            style={styles.nav}
+            style={[styles.nav, style]}
         >
             <NavButton
                 image={require("../../assets/images/nav/search.png")}
@@ -30,17 +32,17 @@ export default function Nav({ navigation }: Props) {
                 callback={() => navigation.navigate("Matches")}
             ></NavButton>
             <NavButton
-                image={require("../../assets/images/nav/list.png")}
-                callback={() => navigation.navigate("List")}
-            ></NavButton>
+                image={require('../../assets/images/nav/list.png')}
+                callback={() => navigation.navigate('List')}
+            />
             <NavButton
                 image={require("../../assets/images/nav/chat.png")}
                 callback={() => navigation.navigate("Chat")}
             ></NavButton>
             <NavButton
-                image={require("../../assets/images/nav/profile.png")}
-                callback={() => navigation.navigate("Profile")}
-            ></NavButton>
+                image={require('../../assets/images/nav/profile.png')}
+                callback={() => navigation.navigate('Profile')}
+            />
         </View>
-    )
+    );
 }

@@ -8,7 +8,7 @@ import Bio from "./Bio";
 
 interface Props {
     navigation: any;
-};
+}
 
 export default function Cadastro({ navigation }: Props) {
     const [usuarioId, setUsuarioId] = useState<number>(0);
@@ -38,8 +38,8 @@ export default function Cadastro({ navigation }: Props) {
 
     function formatDate(date: Date): string {
         const ano = date.getFullYear();
-        const mes = String(date.getMonth() + 1).padStart(2, "0");
-        const dia = String(date.getDate()).padStart(2, "0");
+        const mes = String(date.getMonth() + 1).padStart(2, '0');
+        const dia = String(date.getDate()).padStart(2, '0');
 
         return `${ano}-${mes}-${dia}`;
     }
@@ -65,22 +65,22 @@ export default function Cadastro({ navigation }: Props) {
     }
 
     async function cadastrar() {
-        const response = await fetch("https://finder-app-back.vercel.app/usuario/cadastro", {
-            method: "POST",
+        const response = await fetch('https://finder-app-back.vercel.app/usuario/cadastro', {
+            method: 'POST',
             headers: {
-                "Accept": "application/json",
-                "Content-Type": "application/json",
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                "nome": nome,
-                "email": email,
-                "senha": senha,
-                "datanascimento": formatDate(nascimento),
-                "profissao": profissao,
-                "escolaridade": escolaridade,
-                "descricao": "",
-                "imgperfil": imagem
-            })
+                'nome': nome,
+                'email': email,
+                'senha': senha,
+                'datanascimento': formatDate(nascimento),
+                'profissao': profissao,
+                'escolaridade': escolaridade,
+                'descricao': '',
+                'imgperfil': imagem,
+            }),
         });
 
         const data = await response.json();
@@ -88,7 +88,7 @@ export default function Cadastro({ navigation }: Props) {
             setUsuarioId(data.id);
             setEtapa("CadastroEndereco");
         } else {
-            Alert.alert("Falha ao cadastrar:", data.msg);
+            Alert.alert('Falha ao cadastrar:', data.msg);
         }
     }
 
@@ -101,8 +101,8 @@ export default function Cadastro({ navigation }: Props) {
         const response = await fetch("https://finder-app-back.vercel.app/localizacao/cadastrar", {
             method: "POST",
             headers: {
-                "Accept": "application/json",
-                "Content-Type": "application/json",
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
             },
             body: JSON.stringify({
                 "numero_casa": numCasa,
@@ -128,54 +128,54 @@ export default function Cadastro({ navigation }: Props) {
     }
 
     async function atualizarGostosInteresses() {
-        const response = await fetch("https://finder-app-back.vercel.app/usuario/associarInteGos", {
-            method: "POST",
+        const response = await fetch('https://finder-app-back.vercel.app/usuario/associarInteGos', {
+            method: 'POST',
             headers: {
-                "Accept": "application/json",
-                "Content-Type": "application/json",
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                "usuario": usuarioId,
-                "gostos": gostosSelecionados.map((g) => g.nome),
-                "interesses": interessesSelecionados.map((i) => i.nome)
-            })
+                'usuario': usuarioId,
+                'gostos': gostosSelecionados.map((g) => g.nome),
+                'interesses': interessesSelecionados.map((i) => i.nome),
+            }),
         });
 
         const data = await response.json();
         if (response.ok) {
-            setEtapa("CadastroBio");
+            setEtapa('CadastroBio');
         } else {
-            Alert.alert("Falha cadastrando usuário:", data.msg);
+            Alert.alert('Falha cadastrando usuário:', data.msg);
         }
     }
 
     async function atualizarBio() {
-        const response = await fetch("https://finder-app-back.vercel.app/usuario/editar", {
-            method: "POST",
+        const response = await fetch('https://finder-app-back.vercel.app/usuario/editar', {
+            method: 'POST',
             headers: {
-                "Accept": "application/json",
-                "Content-Type": "application/json",
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                "id": usuarioId,
-                "descricao": descricao
-            })
+                'id': usuarioId,
+                'descricao': descricao,
+            }),
         });
 
         const data = await response.json();
         if (response.ok) {
-            navigation.navigate("List");
+            navigation.navigate('List');
         } else {
-            Alert.alert("Falha cadastrando usuário:", data.msg);
+            Alert.alert('Falha cadastrando usuário:', data.msg);
         }
     }
 
     function proximaEtapa() {
         switch (etapa) {
-            case "EmailSenha":
-                setEtapa("CadastroBasico");
+            case 'EmailSenha':
+                setEtapa('CadastroBasico');
                 break;
-            case "CadastroBasico":
+            case 'CadastroBasico':
                 cadastrar();
                 break;
             case "CadastroEndereco":
@@ -184,7 +184,7 @@ export default function Cadastro({ navigation }: Props) {
             case "GostosInteresses":
                 atualizarGostosInteresses();
                 break;
-            case "CadastroBio":
+            case 'CadastroBio':
                 atualizarBio();
                 break;
         }
@@ -192,7 +192,7 @@ export default function Cadastro({ navigation }: Props) {
 
     function etapaAtual() {
         switch (etapa) {
-            case "EmailSenha":
+            case 'EmailSenha':
                 return (
                     <EmailSenha
                         propSetEmail={setEmail}
@@ -200,7 +200,7 @@ export default function Cadastro({ navigation }: Props) {
                         continuar={proximaEtapa}
                     />
                 );
-            case "CadastroBasico":
+            case 'CadastroBasico':
                 return (
                     <Basico
                         propSetImg={setImagem}
@@ -232,7 +232,7 @@ export default function Cadastro({ navigation }: Props) {
                         continuar={proximaEtapa}
                     />
                 );
-            case "CadastroBio":
+            case 'CadastroBio':
                 return (
                     <Bio
                         propsSetDescricao={setDescricao}
