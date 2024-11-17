@@ -36,21 +36,21 @@ export default function Profile() {
                 name="ProfileBase"
                 options={{ headerShown: false }}
             >
-                {(props) => <ProfileBase {...props} getUsuario={getUsuario} usuario={usuario ? usuario : { datanascimento: '', descricao: '', email: '', escolaridade: '', id: 0, imgperfil: '', nome: '', profissao: '', senha: '' }} />}
+                {(props) => <ProfileBase {...props} getUsuario={getUsuario} usuario={usuario ? usuario : { datanascimento: '', descricao: '', email: '', escolaridade: '', id: 0, imgperfil: '', nome: '', profissao: '', senha: '', visualizar: false }} />}
             </Stack.Screen>
 
             <Stack.Screen
                 name="EdicaoProfile"
                 options={{ headerShown: false }}
             >
-                {(props) => <EdicaoProfile {...props} usuario={usuario ? usuario : { datanascimento: '', descricao: '', email: '', escolaridade: '', id: 0, imgperfil: '', nome: '', profissao: '', senha: '' }} />}
+                {(props) => <EdicaoProfile {...props} usuario={usuario ? usuario : { datanascimento: '', descricao: '', email: '', escolaridade: '', id: 0, imgperfil: '', nome: '', profissao: '', senha: '', visualizar: false }} />}
             </Stack.Screen>
 
             <Stack.Screen
                 name="Configuracao"
                 options={{ headerShown: false }}
             >
-                {(props) => <Configuracao {...props} usuario={usuario ? usuario : { datanascimento: '', descricao: '', email: '', escolaridade: '', id: 0, imgperfil: '', nome: '', profissao: '', senha: '' }} />}
+                {(props) => <Configuracao {...props} usuario={usuario ? usuario : { datanascimento: '', descricao: '', email: '', escolaridade: '', id: 0, imgperfil: '', nome: '', profissao: '', senha: '', visualizar: false }} />}
             </Stack.Screen>
         </Stack.Navigator>
     );

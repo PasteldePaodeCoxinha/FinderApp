@@ -1,5 +1,5 @@
-import React from 'react';
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import React, { useState } from 'react';
+import { Alert, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import useTheme from '../../hooks/UseTheme';
 import Usuario from '../../interface/Usuario';
 
@@ -9,10 +9,35 @@ interface Props {
 }
 
 export default function Configuracao({ navigation, usuario }: Props) {
+    const [visualizarOpcao, setVisualizacaoOpcao] = useState<boolean>(usuario.visualizar);
     const { theme } = useTheme();
 
-    const salvarConfiguracoes = () => {
-        navigation.navigate('ProfileBase');
+    const salvarConfiguracoes = async () => {
+        try {
+            const response = await fetch('https://finder-app-back.vercel.app/usuario/editar', {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    'id': usuario.id,
+                    'visualizar': visualizarOpcao,
+                }),
+            });
+
+            const data = await response.json();
+            if (response.ok) {
+                console.log('Configurações editadas');
+                Alert.alert('Configurações editadas');
+                navigation.navigate('ProfileBase');
+            } else {
+                Alert.alert('Falha ao editar usuário:', data.msg);
+            }
+        } catch (error) {
+            console.log(error);
+            Alert.alert((error as Error).message);
+        }
     };
 
     const styles = StyleSheet.create({
@@ -74,6 +99,10 @@ export default function Configuracao({ navigation, usuario }: Props) {
             borderRadius: 8,
             padding: 12,
         },
+        imagemVerificado: {
+            width: 12,
+            height: 12,
+        },
     });
     return (
         <View style={styles.pagina}>
@@ -89,7 +118,17 @@ export default function Configuracao({ navigation, usuario }: Props) {
                     <Text style={styles.fontePadrao}>
                         Invisível
                     </Text>
-                    <TouchableOpacity style={styles.botaoCheckOpcao}/>
+                    <TouchableOpacity style={styles.botaoCheckOpcao} onPress={() => setVisualizacaoOpcao(!visualizarOpcao)}>
+                        {visualizarOpcao ? (
+                            <Image
+                                style={styles.imagemVerificado}
+                                source={require('../../../assets/images/perfil/verificado.png')}
+                            />
+                        ) : (
+                            <></>
+                        )
+                        }
+                    </TouchableOpacity>
                 </View>
             </View>
 

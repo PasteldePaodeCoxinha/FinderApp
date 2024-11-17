@@ -8,4 +8,5 @@ export default interface Usuario {
 	escolaridade: string,
 	descricao: string,
     imgperfil: string,
+	visualizar: boolean,
 }
