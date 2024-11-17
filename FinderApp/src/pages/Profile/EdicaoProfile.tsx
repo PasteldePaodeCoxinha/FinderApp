@@ -24,6 +24,8 @@ export default function EdicaoProfile({ navigation, usuario }: Props) {
     const [interesses, setInteresses] = useState<Array<{ id: number; nome: string; }>>([]);
     const [gostosSelecionados, setGostosSelecionados] = useState<Array<{ id: number, nome: string }>>([]);
     const [interessesSelecionados, setInteressesSelecionados] = useState<Array<{ nome: string, id: number }>>([]);
+    const [gostosAntigos, setGostosAntigos] = useState<Array<number>>([]);
+    const [interessesAntigos, setInteressesAntigos] = useState<Array<number>>([]);
     const [showGostos, setShowGostos] = useState<boolean>(false);
     const [showInteresses, setShowInteresses] = useState<boolean>(false);
     const { theme } = useTheme();
@@ -53,7 +55,7 @@ export default function EdicaoProfile({ navigation, usuario }: Props) {
         }
     }, [usuario.id]);
 
-    const getInteresses = useCallback( async () => {
+    const getInteresses = useCallback(async () => {
         try {
             const response = await fetch('https://finder-app-back.vercel.app/interesse/lista');
 
@@ -78,10 +80,16 @@ export default function EdicaoProfile({ navigation, usuario }: Props) {
         }
     }, [usuario.id]);
 
+    const setGostosInteressesAntigos = useCallback(() => {
+        setGostosAntigos(gostosSelecionados.map(g => g.id));
+        setInteressesAntigos(interessesSelecionados.map(i => i.id));
+    }, [gostosSelecionados, interessesSelecionados]);
+
     useEffect(() => {
         getGostos();
         getInteresses();
-    }, [getGostos, getInteresses]);
+        setGostosInteressesAntigos();
+    }, [getGostos, getInteresses, setGostosInteressesAntigos]);
 
     const editarInfoUsuario = async () => {
         try {
@@ -103,9 +111,39 @@ export default function EdicaoProfile({ navigation, usuario }: Props) {
 
             const data = await response.json();
             if (response.ok) {
-                console.log('Imagem de perfil alterada');
+                console.log('Usuário editado');
             } else {
-                Alert.alert('Falha ao cadastrar:', data.msg);
+                Alert.alert('Falha ao editar usuário:', data.msg);
+            }
+        } catch (error) {
+            console.log(error);
+            Alert.alert((error as Error).message);
+        }
+    };
+
+    const editarGostosInteresses = async () => {
+        try {
+            const response = await fetch('https://finder-app-back.vercel.app/usuario/editarInteGos', {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    'usuario': usuario.id,
+                    'gostosAntigos': gostosAntigos,
+                    'gostos': gostosSelecionados.map(g => g.nome),
+                    'interesesAntigos': interessesAntigos,
+                    'interesses': interessesSelecionados.map(i => i.nome),
+                }),
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                console.log('Gostos e Interesses editados');
+            } else {
+                Alert.alert('Falha ao editar gostos e interesses: ', data.msg);
             }
         } catch (error) {
             console.log(error);
@@ -116,6 +154,7 @@ export default function EdicaoProfile({ navigation, usuario }: Props) {
     const enviarReqEditarUsuario = () => {
         try {
             editarInfoUsuario();
+            editarGostosInteresses();
             navigation.navigate('ProfileBase');
         } catch (error) {
             Alert.alert('Erro: ', (error as Error).message);
