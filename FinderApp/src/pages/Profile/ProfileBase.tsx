@@ -79,8 +79,10 @@ export default function ProfileBase({ navigation, usuario, getUsuario }: Props) 
             borderRadius: 15,
         },
         containerBotoesAcoes: {
-            flexDirection: 'column',
+            display: 'flex',
+            flexDirection: 'row',
             justifyContent: 'flex-start',
+            gap: 14,
         },
         pfp: {
             borderColor: '#F05050',
@@ -128,6 +130,13 @@ export default function ProfileBase({ navigation, usuario, getUsuario }: Props) 
                     <Image
                         style={styles.botoesAcoes}
                         source={require('../../../assets/images/perfil/lapisedicao.png')}
+                    />
+                </TouchableOpacity>
+
+                <TouchableOpacity style={styles.touchBotaoAcoes} onPress={() => { navigation.navigate('Configuracao'); }}>
+                    <Image
+                        style={styles.botoesAcoes}
+                        source={require('../../../assets/images/perfil/engrenagem.png')}
                     />
                 </TouchableOpacity>
             </View>

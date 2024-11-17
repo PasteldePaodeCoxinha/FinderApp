@@ -88,8 +88,8 @@ export default function EdicaoProfile({ navigation, usuario }: Props) {
     useEffect(() => {
         getGostos();
         getInteresses();
-        setGostosInteressesAntigos();
-    }, [getGostos, getInteresses, setGostosInteressesAntigos]);
+        // setGostosInteressesAntigos();
+    }, [getGostos, getInteresses]);
 
     const editarInfoUsuario = async () => {
         try {

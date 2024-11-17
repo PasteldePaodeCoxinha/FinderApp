@@ -5,6 +5,7 @@ import EdicaoProfile from './EdicaoProfile';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Alert } from 'react-native';
 import Usuario from '../../interface/Usuario';
+import Configuracao from './Configuracao';
 
 const Stack = createNativeStackNavigator();
 
@@ -43,6 +44,13 @@ export default function Profile() {
                 options={{ headerShown: false }}
             >
                 {(props) => <EdicaoProfile {...props} usuario={usuario ? usuario : { datanascimento: '', descricao: '', email: '', escolaridade: '', id: 0, imgperfil: '', nome: '', profissao: '', senha: '' }} />}
+            </Stack.Screen>
+
+            <Stack.Screen
+                name="Configuracao"
+                options={{ headerShown: false }}
+            >
+                {(props) => <Configuracao {...props} usuario={usuario ? usuario : { datanascimento: '', descricao: '', email: '', escolaridade: '', id: 0, imgperfil: '', nome: '', profissao: '', senha: '' }} />}
             </Stack.Screen>
         </Stack.Navigator>
     );
