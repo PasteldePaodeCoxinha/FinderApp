@@ -17,11 +17,6 @@ function App(): React.JSX.Element {
       <NavigationContainer>
         <Stack.Navigator>
           <Stack.Screen
-            name="Profile"
-            component={Profile}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
             name="Landing"
             component={Landing}
             options={{ headerShown: false }}
@@ -44,6 +39,11 @@ function App(): React.JSX.Element {
           <Stack.Screen
             name="Chat"
             component={Chat}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Profile"
+            component={Profile}
             options={{ headerShown: false }}
           />
         </Stack.Navigator>
