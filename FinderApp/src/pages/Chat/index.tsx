@@ -18,6 +18,7 @@ interface Usuario {
     escolaridade: string;
     descricao: string;
     imgperfil: string;
+    novo: boolean;
 };
 
 export default function ListaChat({ navigation }: Props) {
@@ -71,6 +72,13 @@ export default function ListaChat({ navigation }: Props) {
     });
 
     useEffect(() => {
+        async function checaNovoMatch(proprioId: string, matchId: number) {
+            const response = await fetch(`https://finder-app-back.vercel.app/chat/pegarUmChat?usuarioId1=${proprioId}&usuarioId2=${matchId}`);
+            
+            if (response.status != 200)
+                return true;
+            return false;
+        }
         async function getUsuarios() {
             const proprioId = await AsyncStorage.getItem("idUsuario");
             if (!proprioId) return;
@@ -79,7 +87,11 @@ export default function ListaChat({ navigation }: Props) {
 
             const data = await response.json();
             if (response.ok) {
-                setUsuarios(data.matches);
+                const matches = data.matches;
+                for (let i = 0; i < matches.length; i++) {
+                    matches[i].novo = await checaNovoMatch(proprioId, matches[i].id);
+                }
+                setUsuarios(matches);
             } else {
                 Alert.alert("Falha buscando matches:", data.msg);
             }
@@ -96,7 +108,9 @@ export default function ListaChat({ navigation }: Props) {
     function lista() {
         return usuarios.map((u, index) => (
             <TouchableOpacity
-                style={styles.btnMatch}
+                style={[styles.btnMatch, {
+                    borderColor: u.novo ? theme.colors.primary : theme.colors.border
+                }]}
                 onPress={() => abrirChat(u)}
                 key={index}
             >

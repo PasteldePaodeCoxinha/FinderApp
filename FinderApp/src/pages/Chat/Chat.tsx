@@ -47,6 +47,11 @@ export default function Chat({ navigation }: Props) {
             width: "100%",
             backgroundColor: theme.colors.background,
             paddingTop: 15,
+        },
+        chat: {
+            display: "flex",
+            justifyContent: "space-between",
+            gap: 10,
             paddingHorizontal: 20,
         },
         tituloContainer: {
@@ -198,8 +203,6 @@ export default function Chat({ navigation }: Props) {
             const data = await response.json();
             if (response.ok) {
                 setMensagens(data.mensagens);
-            } else {
-                Alert.alert("Falha carregando mensagens:", data.msg);
             }
         }
         setInterval(() => {
@@ -247,37 +250,38 @@ export default function Chat({ navigation }: Props) {
 
     return (
         <View style={styles.pagina}>
-            <View style={styles.tituloContainer}>
-                <View style={styles.imageContainer}>
-                    <Image
-                        source={(match.imgperfil ? { uri: match.imgperfil } : require("../../../assets/images/nav/profile.png"))}
-                        style={styles.image}
-                    ></Image>
+            <View style={styles.chat}>
+                <View style={styles.tituloContainer}>
+                    <View style={styles.imageContainer}>
+                        <Image
+                            source={(match.imgperfil ? { uri: match.imgperfil } : require("../../../assets/images/nav/profile.png"))}
+                            style={styles.image}
+                        ></Image>
+                    </View>
+                    <Text style={styles.titulo}>{match.nome}</Text>
                 </View>
-                <Text style={styles.titulo}>{match.nome}</Text>
-            </View>
 
-            <View style={styles.mensagens}>
-                {ListarMensagens()}
-            </View>
+                <View style={styles.mensagens}>
+                    {ListarMensagens()}
+                </View>
 
-            <View style={styles.input}>
-                <CustomTextInput
-                    style={styles.textInput}
-                    setText={(text) => setMsgAtual(text)}
-                    value={msgAtual}
-                />
-                <TouchableOpacity
-                    style={styles.btnEnviar}
-                    onPress={EnviarMsg}
-                >
-                    <Image
-                        source={require("../../../assets/images/chat/send.png")}
-                        style={styles.enviarImage}
-                    ></Image>
-                </TouchableOpacity>
+                <View style={styles.input}>
+                    <CustomTextInput
+                        style={styles.textInput}
+                        setText={(text) => setMsgAtual(text)}
+                        value={msgAtual}
+                    />
+                    <TouchableOpacity
+                        style={styles.btnEnviar}
+                        onPress={EnviarMsg}
+                    >
+                        <Image
+                            source={require("../../../assets/images/chat/send.png")}
+                            style={styles.enviarImage}
+                        ></Image>
+                    </TouchableOpacity>
+                </View>
             </View>
-
             <Nav
                 navigation={navigation}
             ></Nav>
