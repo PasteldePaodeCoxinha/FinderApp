@@ -108,6 +108,11 @@ export default function CustomOptionsInput(props: Props) {
                         id: op.id,
                         selected: (o.id === op.id && (op.selected || selectedCount() < props.minSelected) ? !op.selected : op.selected),
                     })));
+                    props.setOptions(selectedOptions.map((op) => ({
+                        nome: op.nome,
+                        id: op.id,
+                        selected: (o.id === op.id && (op.selected || selectedCount() < props.minSelected) ? !op.selected : op.selected),
+                    })).filter(o => o.selected));
                 }}
             >
                 <Text style={styles.optionButtonText}>{o.nome}</Text>

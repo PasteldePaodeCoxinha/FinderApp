@@ -108,12 +108,11 @@ export default function List({ navigation }: Props) {
     }
 
     async function getUsuarios() {
-        const response = await fetch("https://finder-app-back.vercel.app/usuario/lista");
+        const proprioId = await AsyncStorage.getItem("idUsuario");
+        const response = await fetch(`https://finder-app-back.vercel.app/usuario/lista?usuarioId=${proprioId}`);
 
         const data = await response.json();
         if (response.ok) {
-            const proprioId = await AsyncStorage.getItem("idUsuario");
-
             const tmpUsuarios = data.usuarios;
             for (let i = 0; i < tmpUsuarios.length; i++) {
                 tmpUsuarios[i].localizacao = await getEndereco(tmpUsuarios[i]);
