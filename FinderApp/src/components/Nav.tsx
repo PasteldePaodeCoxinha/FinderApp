@@ -38,9 +38,10 @@ export default function Nav({ navigation, style }: Props) {
         async function checaNovoMatch(proprioId: string, matchId: number) {
             const response = await fetch(`https://finder-app-back.vercel.app/chat/pegarUmChat?usuarioId1=${proprioId}&usuarioId2=${matchId}`);
 
-            if (response.status != 200)
-                return true;
-            return false;
+            // console.log("checaNovoMatch", response.status, await response.json());
+            if (response.ok)
+                return false;
+            return true;
         }
         async function checaMatch() {
             try {
@@ -73,6 +74,7 @@ export default function Nav({ navigation, style }: Props) {
                 const response = await fetch(`https://finder-app-back.vercel.app/mensagem/novaMsg?chatId=${JSON.parse(userChat).id}&usuarioId=${proprioId}`);
 
                 const data = await response.json();
+                // console.log("checaNotificacoes", response.status, data)
                 if (response.ok) {
                     setTemMensagem(data.mensagens.filter((m: any) => !m.visualizado).length);
                 }
@@ -90,10 +92,6 @@ export default function Nav({ navigation, style }: Props) {
         <View
             style={[styles.nav, style]}
         >
-            <NavButton
-                image={require("../../assets/images/nav/search.png")}
-                callback={() => navigation.navigate("Search")}
-            ></NavButton>
             <NavButton
                 image={require("../../assets/images/nav/matches.png")}
                 destacar={temMatch}

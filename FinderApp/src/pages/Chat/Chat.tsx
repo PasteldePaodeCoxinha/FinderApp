@@ -196,6 +196,15 @@ export default function Chat({ navigation }: Props) {
     }, []);
 
     useEffect(() => {
+        async function marcarVisualizado() {
+            if (chat == null) return;
+            const response = await fetch(`https://finder-app-back.vercel.app/mensagem/marcarVisualizado?chatId=${chat.id}&usuarioId=${proprioId}`);
+
+            const data = await response.json();
+            if (response.ok) {
+                setMensagens(data.mensagens);
+            }
+        }
         async function mensagensChat() {
             if (chat == null) return;
             const response = await fetch(`https://finder-app-back.vercel.app/mensagem/listaMsg?chatId=${chat.id}`);
@@ -203,6 +212,7 @@ export default function Chat({ navigation }: Props) {
             const data = await response.json();
             if (response.ok) {
                 setMensagens(data.mensagens);
+                await marcarVisualizado();
             }
         }
         setInterval(() => {
