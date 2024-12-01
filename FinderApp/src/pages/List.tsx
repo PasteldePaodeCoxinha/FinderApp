@@ -113,10 +113,10 @@ export default function List({ navigation }: Props) {
 
         const data = await response.json();
         if (response.ok) {
-            const tmpUsuarios = data.usuarios;
+            const tmpUsuarios = data.usuarios.sort((a: any, b: any) => b.pontos - a.pontos);
             for (let i = 0; i < tmpUsuarios.length; i++) {
                 tmpUsuarios[i].localizacao = await getEndereco(tmpUsuarios[i]);
-                tmpUsuarios[i].match = await (checaMatch(tmpUsuarios[i]));
+                tmpUsuarios[i].match = await checaMatch(tmpUsuarios[i]);
             }
 
             if (proprioId) {

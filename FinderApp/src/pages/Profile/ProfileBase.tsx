@@ -45,7 +45,7 @@ export default function ProfileBase({ navigation, usuario, getUsuario }: Props) 
                     Alert.alert('Falha ao cadastrar:', data.msg);
                 }
             } catch (error) {
-                console.log('Erro: ', error);
+                console.log('Erro mudarImgPerfil: ', error);
             }
         };
 
