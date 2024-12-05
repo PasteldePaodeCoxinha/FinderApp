@@ -176,7 +176,11 @@ export default function Chat({ navigation }: Props) {
         return mensagens.filter(m => (m.audmsg && m.audmsg != undefined) || (m.textmsg && m.textmsg != undefined)).map((m, index) => {
             if (m.audmsg) {
                 return (
-                    <CustomAudioPlayer key={index} audio={m.audmsg} />
+                    <CustomAudioPlayer
+                        usuario={m.usuario_id == proprioId}
+                        key={index}
+                        audio={m.audmsg}
+                    />
                 );
             }
 

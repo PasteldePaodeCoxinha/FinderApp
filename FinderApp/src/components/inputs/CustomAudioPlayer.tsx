@@ -1,74 +1,120 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Button } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import AudioRecorderPlayer from 'react-native-audio-recorder-player';
+import useTheme from '../../hooks/UseTheme';
+import Sound from 'react-native-sound';
 
 const RNFS = require('react-native-fs');
 
 interface Props {
     audio: string;
+    usuario: boolean;
 };
+
+const audioRecorderPlayer = new AudioRecorderPlayer();
 
 export default function CustomAudioPlayer(props: Props) {
     const [isPlaying, setIsPlaying] = useState(false);
-    const [playTime, setPlayTime] = useState('');
-    const [audioRecorderPlayer, _] = useState(new AudioRecorderPlayer());
+    const [duration, setDuration] = useState(0);
+    const [playTime, setPlayTime] = useState(0);
+    const { theme } = useTheme();
 
     const styles = StyleSheet.create({
-        enviarImage: {
+        tocarImage: {
             width: 40,
             height: 40,
+        },
+        audioImage: {
+            width: 80,
+            height: 25,
+        },
+        durationText: {
+            color: theme.colors.text,
+        },
+        msgUsuario: {
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+            alignSelf: "flex-end",
+            backgroundColor: theme.colors.msgBG,
+            borderWidth: 2,
+            borderColor: theme.colors.border,
+            borderTopLeftRadius: 15,
+            borderBottomRightRadius: 15,
+            borderBottomLeftRadius: 15,
+            padding: 5,
+            paddingHorizontal: 10,
+            maxWidth: "60%",
+        },
+        msgMatch: {
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+            alignSelf: "flex-start",
+            backgroundColor: "white",
+            borderWidth: 2,
+            borderColor: theme.colors.border,
+            borderTopRightRadius: 15,
+            borderBottomRightRadius: 15,
+            borderBottomLeftRadius: 15,
+            padding: 5,
+            paddingHorizontal: 10,
+            maxWidth: "60%",
         },
     });
 
     async function playAudioFromBase64(base64String: string) {
         try {
-            console.log(base64String, props.audio);
             const filePath = `${RNFS.DocumentDirectoryPath}/audio_tocando.mp3`;
             await RNFS.writeFile(filePath, base64String, 'base64');
 
             audioRecorderPlayer.addPlayBackListener((e: any) => {
-                setPlayTime(e.current_position);
+                setPlayTime(e.currentPosition / 1000);
+                if (e.isFinished) {
+                    stopAudio();
+                }
             });
+
+            const sound = new Sound(filePath, '', (error) => {
+                if (error) {
+                    console.log('Failed to load sound', error);
+                    return;
+                }
+                const durationInSeconds = sound.getDuration();
+                setDuration(durationInSeconds);
+            });
+
 
             try {
                 await audioRecorderPlayer.startPlayer(filePath);
                 setIsPlaying(true);
             } catch (error) {
-                console.error('Error playing audio:', error);
+                console.error('Erro tocando áudio:', error);
             }
         }
         catch (error) {
-            console.error('Error playing audio:', error);
+            console.error('Erro tocando áudio:', error);
         }
-
-        // if (isPlaying) {
-        //     const res = await audioRecorderPlayer.stopPlayer();
-        //     console.log("stopPlayer: ", res);
-        //     setIsPlaying(false);
-        // } else {
-        //     const res = await audioRecorderPlayer.startPlayer(audioUri);
-        //     console.log("startPlayer: ", res);
-        //     audioRecorderPlayer.addPlayBackListener((e) => {
-        //         console.log('Tocando...', e);
-        //     });
-        //     setIsPlaying(true);
-        // }
     };
 
-    const stopAudio = async () => {
+    async function stopAudio() {
         try {
+            audioRecorderPlayer.removePlayBackListener();
             await audioRecorderPlayer.stopPlayer();
             setIsPlaying(false);
-            setPlayTime('');
+            setPlayTime(0);
         } catch (error) {
-            console.error('Error stopping audio:', error);
+            console.error('Erro parando áudio:', error);
         }
     };
 
     return (
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-            <Button
-                title={isPlaying ? 'Stop Audio' : 'Play Audio'}
+        <View style={props.usuario ? styles.msgUsuario : styles.msgMatch}>
+            {/* 
+            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+            </View>
+            */}
+            <TouchableOpacity
                 onPress={() => {
                     if (isPlaying) {
                         stopAudio();
@@ -76,24 +122,17 @@ export default function CustomAudioPlayer(props: Props) {
                         playAudioFromBase64(props.audio);
                     }
                 }}
+            >
+                <Image
+                    style={styles.tocarImage}
+                    source={isPlaying ? require('../../../assets/images/chat/pause.png') : require('../../../assets/images/chat/play.png')}
+                />
+            </TouchableOpacity>
+            <Image
+                style={styles.audioImage}
+                source={require('../../../assets/images/chat/audio.png')}
             />
-            <Text>Playback Time: {playTime}</Text>
+            <Text style={styles.durationText}>{duration >= 1 ? `${(duration - playTime).toFixed(0)}s` : ""}</Text>
         </View>
-        // <View>
-        //     <TouchableOpacity
-        //         onPress={isRecording ? stopRecording : startRecording}
-        //     >
-        //         <Image
-        //             source={isRecording ? require("../../../assets/images/chat/voice.png") : require("../../../assets/images/chat/mic.png")}
-        //             style={styles.enviarImage}
-        //         ></Image>
-        //     </TouchableOpacity>
-        //     {/* <Button
-        //         title={isRecording ? 'Parar' : 'Gravar'}
-        //         onPress={isRecording ? stopRecording : startRecording}
-        //     /> */}
-        //     {/* <Button title={isPlaying ? 'Parar' : 'Tocar'} onPress={playAudio} /> */}
-        //     {audioUri && <Text>Audio Path: {audioUri}</Text>}
-        // </View>
     );
 }
