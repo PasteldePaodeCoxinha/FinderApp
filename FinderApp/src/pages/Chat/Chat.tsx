@@ -1,9 +1,11 @@
-import { StyleSheet, View, Text, Alert, Image, TouchableOpacity } from "react-native";
-import { useEffect, useState } from "react";
+import { StyleSheet, View, Text, Alert, Image, TouchableOpacity, ScrollView } from "react-native";
+import { useEffect, useRef, useState } from "react";
 import useTheme from "../../hooks/UseTheme";
 import Nav from "../../components/Nav";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import CustomTextInput from "../../components/inputs/CustomTextInput";
+import CustomAudioInput from "../../components/inputs/CustomAudioInput";
+import CustomAudioPlayer from "../../components/inputs/CustomAudioPlayer";
 
 interface Props {
     navigation: any;
@@ -35,8 +37,10 @@ export default function Chat({ navigation }: Props) {
     const [chat, setChat] = useState<IChat | null>(null);
     const [mensagens, setMensagens] = useState<Array<IMensagem>>([]);
     const [msgAtual, setMsgAtual] = useState<string>("");
+    const [audioAtual, setAudioAtual] = useState<string>("");
     const [proprioId, setProprioId] = useState<number>(0);
     const { theme } = useTheme();
+    const scrollViewRef = useRef<ScrollView>({} as ScrollView);
 
     const styles = StyleSheet.create({
         pagina: {
@@ -80,7 +84,7 @@ export default function Chat({ navigation }: Props) {
             borderRadius: 15,
             borderColor: theme.colors.border,
             borderWidth: 2,
-            minHeight: "75%",
+            height: "75%",
             padding: 5,
         },
         msgUsuario: {
@@ -118,7 +122,7 @@ export default function Chat({ navigation }: Props) {
             flexDirection: "row",
         },
         textInput: {
-            width: "85%"
+            width: "75%"
         },
         btnEnviar: {
 
@@ -128,6 +132,64 @@ export default function Chat({ navigation }: Props) {
             height: 40,
         },
     });
+
+    async function EnviarMsg() {
+        try {
+            console.log("audioAtual", audioAtual.length);
+            if (msgAtual == undefined && audioAtual == undefined) return;
+
+            const proprioId = await AsyncStorage.getItem("idUsuario");
+            if (proprioId == undefined) return;
+
+            if (chat == undefined) return;
+
+            const response = await fetch("https://finder-app-back.vercel.app/mensagem/criarMsg", {
+                method: "POST",
+                headers: {
+                    "Accept": "application/json",
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    "textMsg": msgAtual,
+                    "usuarioId": proprioId,
+                    "chatId": chat?.id,
+                    "audMsg": audioAtual
+                })
+            });
+
+            const data = await response.json();
+            if (response.ok) {
+                setMsgAtual("");
+                setAudioAtual("");
+            } else {
+                console.log("Falha ao enviar mensagem chat:", data.msg);
+                // Alert.alert("Falha ao enviar mensagem chat: ", data.msg);
+            }
+        }
+        catch (err: any) {
+            console.log("Falha ao enviar mensagem chat:", err);
+            // Alert.alert("Falha ao enviar mensagem chat: ", err);
+        }
+    }
+
+    function ListarMensagens() {
+        return mensagens.filter(m => (m.audmsg && m.audmsg != undefined) || (m.textmsg && m.textmsg != undefined)).map((m, index) => {
+            if (m.audmsg) {
+                return (
+                    <CustomAudioPlayer key={index} audio={m.audmsg} />
+                );
+            }
+
+            return (
+                <View
+                    style={(m.usuario_id == proprioId ? styles.msgUsuario : styles.msgMatch)}
+                    key={index}
+                >
+                    <Text style={styles.msgText}>{m.textmsg}</Text>
+                </View>
+            );
+        });
+    }
 
     useEffect(() => {
         async function ChecaChat() {
@@ -146,14 +208,16 @@ export default function Chat({ navigation }: Props) {
             setMatch(JSON.parse(userChat));
 
             const response = await fetch(`https://finder-app-back.vercel.app/chat/pegarUmChat?usuarioId1=${proprioId}&usuarioId2=${parseInt(JSON.parse(userChat).id)}`);
-            if (response.status != 200)
+            if (response.status != 200) {
                 return false;
+            }
 
             const data = await response.json();
             if (response.ok) {
                 setChat(data.chat);
             } else {
-                Alert.alert("Falha carregando chat:", data.msg);
+                console.log("Falha carregando chat:", data.msg);
+                // Alert.alert("Falha carregando chat:", data.msg);
             }
 
             return true;
@@ -188,75 +252,46 @@ export default function Chat({ navigation }: Props) {
             if (response.ok) {
                 await ChecaChat();
             } else {
-                Alert.alert("Falha criando chat:", data.msg);
+                console.log("Falha criando chat:", data.msg);
+                // Alert.alert("Falha criando chat:", data.msg);
             }
         }
 
         CriarChat();
+        if (scrollViewRef.current) {
+            scrollViewRef.current.scrollToEnd({ animated: false });
+        }
     }, []);
 
     useEffect(() => {
         async function marcarVisualizado() {
-            if (chat == null) return;
-            const response = await fetch(`https://finder-app-back.vercel.app/mensagem/marcarVisualizado?chatId=${chat.id}&usuarioId=${proprioId}`);
+            const response = await fetch(`https://finder-app-back.vercel.app/mensagem/marcarVisualizado?chatId=${chat?.id}&usuarioId=${proprioId}`);
 
-            const data = await response.json();
             if (response.ok) {
+                const data = await response.json();
                 setMensagens(data.mensagens);
             }
         }
         async function mensagensChat() {
-            if (chat == null) return;
-            const response = await fetch(`https://finder-app-back.vercel.app/mensagem/listaMsg?chatId=${chat.id}`);
+            const response = await fetch(`https://finder-app-back.vercel.app/mensagem/listaMsg?chatId=${chat?.id}`);
 
-            const data = await response.json();
             if (response.ok) {
-                setMensagens(data.mensagens);
+                const data = await response.json();
+                setMensagens(data.mensagens.sort((a: any, b: any) => a.id - b.id));
                 await marcarVisualizado();
             }
         }
-        setInterval(() => {
-            mensagensChat();
-        }, 1000);
+
+        if (chat != undefined) {
+            setInterval(() => {
+                mensagensChat();
+            }, 1000);
+        }
     }, [chat]);
 
-    function ListarMensagens() {
-        return mensagens.map((m, index) => (
-            <View
-                style={(m.usuario_id == proprioId ? styles.msgUsuario : styles.msgMatch)}
-                key={index}
-            >
-                <Text style={styles.msgText}>{m.textmsg}</Text>
-            </View>
-        ));
-    }
-
-    async function EnviarMsg() {
-        if (!msgAtual) return;
-
-        const proprioId = await AsyncStorage.getItem("idUsuario");
-        if (!proprioId) return;
-
-        const response = await fetch("https://finder-app-back.vercel.app/mensagem/criarMsg", {
-            method: "POST",
-            headers: {
-                "Accept": "application/json",
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                "textMsg": msgAtual,
-                "usuarioId": proprioId,
-                "chatId": chat?.id
-            })
-        });
-
-        const data = await response.json();
-        if (response.ok) {
-            setMsgAtual("");
-        } else {
-            Alert.alert("Falha ao enviar mensagem chat:", data.msg);
-        }
-    }
+    useEffect(() => {
+        EnviarMsg();
+    }, [audioAtual]);
 
     return (
         <View style={styles.pagina}>
@@ -271,15 +306,22 @@ export default function Chat({ navigation }: Props) {
                     <Text style={styles.titulo}>{match.nome}</Text>
                 </View>
 
-                <View style={styles.mensagens}>
+                <ScrollView
+                    ref={scrollViewRef}
+                    style={styles.mensagens}
+                    horizontal={false}
+                >
                     {ListarMensagens()}
-                </View>
+                </ScrollView>
 
                 <View style={styles.input}>
                     <CustomTextInput
                         style={styles.textInput}
-                        setText={(text) => setMsgAtual(text)}
+                        setText={setMsgAtual}
                         value={msgAtual}
+                    />
+                    <CustomAudioInput
+                        setAudio={setAudioAtual}
                     />
                     <TouchableOpacity
                         style={styles.btnEnviar}

@@ -56,18 +56,23 @@ export default function Login({ navigation }: Props) {
     });
 
     async function login() {
-        const response = await fetch(`https://finder-app-back.vercel.app/usuario/login?email=${email}&senha=${senha}`);
+        try {
+            const response = await fetch(`https://finder-app-back.vercel.app/usuario/login?email=${email}&senha=${senha}`);
 
-        const data = await response.json();
-        if (response.ok) {
-            try {
-                await AsyncStorage.setItem('idUsuario', data.idUsuario.toString());
-                navigation.navigate('List');
-            } catch (error) {
-                Alert.alert('Falha ao fazer login', error as any);
+            const data = await response.json();
+            if (response.ok) {
+                try {
+                    await AsyncStorage.setItem('idUsuario', data.idUsuario.toString());
+                    navigation.navigate('List');
+                } catch (error) {
+                    Alert.alert('Falha ao fazer login', error as any);
+                }
+            } else {
+                Alert.alert('Falha ao fazer login:', data.msg);
             }
-        } else {
-            Alert.alert('Falha ao fazer login:', data.msg);
+        }
+        catch (err: any) {
+            Alert.alert('Falha ao fazer login:', err);
         }
     }
 

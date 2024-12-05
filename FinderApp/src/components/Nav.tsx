@@ -29,8 +29,8 @@ export default function Nav({ navigation, style }: Props) {
 
             const response = await fetch(`https://finder-app-back.vercel.app/curtir/listaMatch?usuarioId=${proprioId}`);
 
-            const data = await response.json();
             if (response.ok) {
+                const data = await response.json();
                 return data.matches;
             }
             return [];
@@ -66,16 +66,16 @@ export default function Nav({ navigation, style }: Props) {
         async function checaNotificacoes() {
             try {
                 const proprioId = await AsyncStorage.getItem("idUsuario");
-                if (!proprioId) return;
+                if (proprioId == undefined) return;
 
                 const userChat = await AsyncStorage.getItem("userChat");
-                if (!userChat) return;
+                if (userChat == undefined) return;
 
                 const response = await fetch(`https://finder-app-back.vercel.app/mensagem/novaMsg?chatId=${JSON.parse(userChat).id}&usuarioId=${proprioId}`);
 
-                const data = await response.json();
                 // console.log("checaNotificacoes", response.status, data)
                 if (response.ok) {
+                    const data = await response.json();
                     setTemMensagem(data.mensagens.filter((m: any) => !m.visualizado).length);
                 }
             }
