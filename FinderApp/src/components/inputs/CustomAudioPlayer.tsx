@@ -110,10 +110,6 @@ export default function CustomAudioPlayer(props: Props) {
 
     return (
         <View style={props.usuario ? styles.msgUsuario : styles.msgMatch}>
-            {/* 
-            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-            </View>
-            */}
             <TouchableOpacity
                 onPress={() => {
                     if (isPlaying) {

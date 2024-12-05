@@ -1,4 +1,4 @@
-import { StyleSheet, View, Text, Alert, Image, TouchableOpacity, ScrollView } from "react-native";
+import { StyleSheet, View, Text, Image, TouchableOpacity, ScrollView } from "react-native";
 import { useEffect, useRef, useState } from "react";
 import useTheme from "../../hooks/UseTheme";
 import Nav from "../../components/Nav";
@@ -6,6 +6,8 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import CustomTextInput from "../../components/inputs/CustomTextInput";
 import CustomAudioInput from "../../components/inputs/CustomAudioInput";
 import CustomAudioPlayer from "../../components/inputs/CustomAudioPlayer";
+import ChatImageInput from "../../components/inputs/ChatImageInput";
+import ChatImage from "../../components/inputs/ChatImage";
 
 interface Props {
     navigation: any;
@@ -37,10 +39,15 @@ export default function Chat({ navigation }: Props) {
     const [chat, setChat] = useState<IChat | null>(null);
     const [mensagens, setMensagens] = useState<Array<IMensagem>>([]);
     const [msgAtual, setMsgAtual] = useState<string>("");
+    const [imagemAtual, setImagemAtual] = useState<string>("");
     const [audioAtual, setAudioAtual] = useState<string>("");
     const [proprioId, setProprioId] = useState<number>(0);
     const { theme } = useTheme();
     const scrollViewRef = useRef<ScrollView>({} as ScrollView);
+
+    useEffect(() => {
+        scrollViewRef.current.scrollToEnd({ animated: true });
+    }, [scrollViewRef])
 
     const styles = StyleSheet.create({
         pagina: {
@@ -120,9 +127,10 @@ export default function Chat({ navigation }: Props) {
         input: {
             display: "flex",
             flexDirection: "row",
+            gap: 5,
         },
         textInput: {
-            width: "75%"
+            width: "65%"
         },
         btnEnviar: {
 
@@ -135,8 +143,7 @@ export default function Chat({ navigation }: Props) {
 
     async function EnviarMsg() {
         try {
-            console.log("audioAtual", audioAtual.length);
-            if (msgAtual == undefined && audioAtual == undefined) return;
+            if ((!msgAtual || msgAtual == undefined) && (!audioAtual || audioAtual == undefined) && (!imagemAtual || imagemAtual == undefined)) return;
 
             const proprioId = await AsyncStorage.getItem("idUsuario");
             if (proprioId == undefined) return;
@@ -153,7 +160,8 @@ export default function Chat({ navigation }: Props) {
                     "textMsg": msgAtual,
                     "usuarioId": proprioId,
                     "chatId": chat?.id,
-                    "audMsg": audioAtual
+                    "audMsg": audioAtual,
+                    "imgMsg": imagemAtual
                 })
             });
 
@@ -161,6 +169,9 @@ export default function Chat({ navigation }: Props) {
             if (response.ok) {
                 setMsgAtual("");
                 setAudioAtual("");
+                setImagemAtual("");
+
+                scrollViewRef.current.scrollToEnd({ animated: true });
             } else {
                 console.log("Falha ao enviar mensagem chat:", data.msg);
                 // Alert.alert("Falha ao enviar mensagem chat: ", data.msg);
@@ -173,12 +184,23 @@ export default function Chat({ navigation }: Props) {
     }
 
     function ListarMensagens() {
-        return mensagens.filter(m => (m.audmsg && m.audmsg != undefined) || (m.textmsg && m.textmsg != undefined)).map((m, index) => {
+        return mensagens.filter(m => m.audmsg || m.textmsg || m.imgmsg).map((m, index) => {
+            if (m.imgmsg) {
+                return (
+                    <ChatImage
+                        key={index}
+                        usuario={m.usuario_id == proprioId}
+                        texto={m.textmsg}
+                        image={m.imgmsg}
+                    />
+                );
+            }
+
             if (m.audmsg) {
                 return (
                     <CustomAudioPlayer
-                        usuario={m.usuario_id == proprioId}
                         key={index}
+                        usuario={m.usuario_id == proprioId}
                         audio={m.audmsg}
                     />
                 );
@@ -186,8 +208,8 @@ export default function Chat({ navigation }: Props) {
 
             return (
                 <View
-                    style={(m.usuario_id == proprioId ? styles.msgUsuario : styles.msgMatch)}
                     key={index}
+                    style={(m.usuario_id == proprioId ? styles.msgUsuario : styles.msgMatch)}
                 >
                     <Text style={styles.msgText}>{m.textmsg}</Text>
                 </View>
@@ -295,7 +317,7 @@ export default function Chat({ navigation }: Props) {
 
     useEffect(() => {
         EnviarMsg();
-    }, [audioAtual]);
+    }, [audioAtual, imagemAtual]);
 
     return (
         <View style={styles.pagina}>
@@ -323,6 +345,9 @@ export default function Chat({ navigation }: Props) {
                         style={styles.textInput}
                         setText={setMsgAtual}
                         value={msgAtual}
+                    />
+                    <ChatImageInput
+                        setImage={setImagemAtual}
                     />
                     <CustomAudioInput
                         setAudio={setAudioAtual}
