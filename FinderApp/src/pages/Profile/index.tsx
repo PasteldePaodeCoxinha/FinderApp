@@ -14,9 +14,6 @@ export default function Profile() {
 
     const getUsuario = async () => {
         let idUsuario = await AsyncStorage.getItem('idUsuario');
-        if (idUsuario === null) {
-            idUsuario = '47';
-        }
         const response = await fetch(`https://finder-app-back.vercel.app/usuario/getUmUsuario?id=${idUsuario}`);
         const data = await response.json();
         if (response.status === 200) {

@@ -1,4 +1,4 @@
-package com.finderapp
+package com.finderap
 
 import com.facebook.react.ReactActivity
 import com.facebook.react.ReactActivityDelegate
