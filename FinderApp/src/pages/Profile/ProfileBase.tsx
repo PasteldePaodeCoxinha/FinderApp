@@ -4,6 +4,7 @@ import Nav from '../../components/Nav';
 import useTheme from '../../hooks/UseTheme';
 import CustomImageInput from '../../components/inputs/CustomImageInput';
 import Usuario from '../../interface/Usuario';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 interface Props {
     navigation: any;
@@ -15,6 +16,11 @@ export default function ProfileBase({ navigation, usuario, getUsuario }: Props) 
     const [idade, setIdade] = useState<number>(0);
     const [img, setImg] = useState<string>('');
     const { theme } = useTheme();
+
+    const logOff = () => {
+        AsyncStorage.setItem('idUsuario', '');
+        navigation.navigate('Landing');
+    };
 
     useEffect(() => {
         let timeDiff = Math.abs(Date.now() - (new Date(usuario.datanascimento)).getTime());
@@ -75,7 +81,6 @@ export default function ProfileBase({ navigation, usuario, getUsuario }: Props) 
         },
         informacoesBasi: {
             alignItems: 'center',
-            marginTop: '21%',
             borderRadius: 15,
         },
         containerBotoesAcoes: {
@@ -117,9 +122,24 @@ export default function ProfileBase({ navigation, usuario, getUsuario }: Props) 
             fontSize: 29,
             color: '#1E1E1E',
         },
+        containerLogOff: {
+            display: 'flex',
+            alignSelf: 'flex-start',
+            marginTop: '3%',
+            marginLeft: '3%',
+        },
     });
     return (
         <View style={styles.pagina}>
+            <View style={styles.containerLogOff}>
+                <TouchableOpacity style={styles.touchBotaoAcoes} onPress={logOff}>
+                    <Image
+                        style={styles.botoesAcoes}
+                        source={require('../../../assets/images/perfil/logoff.png')}
+                    />
+                </TouchableOpacity>
+            </View>
+
             <View style={styles.informacoesBasi}>
                 <CustomImageInput setImage={setImg} defaultImage={usuario.imgperfil} />
                 <Text style={styles.textoInfo}>{usuario.nome}, {idade}</Text>

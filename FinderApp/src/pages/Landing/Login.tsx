@@ -64,6 +64,8 @@ export default function Login({ navigation }: Props) {
                 try {
                     await AsyncStorage.setItem('idUsuario', data.idUsuario.toString());
                     await AsyncStorage.removeItem("userChat");
+                    setEmail('');
+                    setSenha('');
                     navigation.navigate('List');
                 } catch (error) {
                     Alert.alert('Falha ao fazer login', error as any);
