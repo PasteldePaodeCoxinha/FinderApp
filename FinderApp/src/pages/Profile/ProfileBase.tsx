@@ -5,6 +5,8 @@ import useTheme from '../../hooks/UseTheme';
 import CustomImageInput from '../../components/inputs/CustomImageInput';
 import Usuario from '../../interface/Usuario';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {PermissionsAndroid} from 'react-native';
+PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS);
 
 interface Props {
     navigation: any;

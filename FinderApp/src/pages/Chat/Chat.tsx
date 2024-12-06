@@ -8,6 +8,7 @@ import CustomAudioInput from "../../components/inputs/CustomAudioInput";
 import CustomAudioPlayer from "../../components/inputs/CustomAudioPlayer";
 import ChatImageInput from "../../components/inputs/ChatImageInput";
 import ChatImage from "../../components/inputs/ChatImage";
+import messaging from '@react-native-firebase/messaging';
 
 interface Props {
     navigation: any;
@@ -167,6 +168,7 @@ export default function Chat({ navigation }: Props) {
 
             const data = await response.json();
             if (response.ok) {
+
                 setMsgAtual("");
                 setAudioAtual("");
                 setImagemAtual("");
