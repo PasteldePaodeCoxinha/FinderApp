@@ -18,7 +18,8 @@ export default function ProfileBase({ navigation, usuario, getUsuario }: Props) 
     const { theme } = useTheme();
 
     const logOff = () => {
-        AsyncStorage.setItem('idUsuario', '');
+        AsyncStorage.removeItem("userChat");
+        AsyncStorage.removeItem('idUsuario');
         navigation.navigate('Landing');
     };
 

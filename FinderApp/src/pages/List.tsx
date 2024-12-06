@@ -257,7 +257,7 @@ export default function List({ navigation }: Props) {
                 />
             );
         }
-        return <Text>Não há usuários</Text>
+        return <Text>Encontrando usuários...</Text>
     }
 
     return (
