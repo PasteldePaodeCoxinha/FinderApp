@@ -1,4 +1,4 @@
-package com.finderap
+package com.finderapp
 
 import android.app.Application
 import com.facebook.react.PackageList
