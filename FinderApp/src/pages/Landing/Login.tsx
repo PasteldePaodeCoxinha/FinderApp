@@ -63,6 +63,7 @@ export default function Login({ navigation }: Props) {
             if (response.ok) {
                 try {
                     await AsyncStorage.setItem('idUsuario', data.idUsuario.toString());
+                    await AsyncStorage.removeItem("userChat");
                     navigation.navigate('List');
                 } catch (error) {
                     Alert.alert('Falha ao fazer login', error as any);
