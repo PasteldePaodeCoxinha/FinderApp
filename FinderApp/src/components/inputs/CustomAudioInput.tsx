@@ -9,10 +9,11 @@ interface Props {
     setAudio: (audio: string) => void;
 };
 
+const audioRecorderPlayer = new AudioRecorderPlayer();
+
 export default function CustomAudioInput(props: Props) {
     const [isRecording, setIsRecording] = useState(false);
     const [audioUri, setAudioUri] = useState('');
-    const [audioRecorderPlayer, _] = useState(new AudioRecorderPlayer());
 
     const styles = StyleSheet.create({
         enviarImage: {
@@ -38,8 +39,7 @@ export default function CustomAudioInput(props: Props) {
         const uri = `${RNFS.DocumentDirectoryPath}/audio_gravando.mp3`;
 
         try {
-            const res = await audioRecorderPlayer.startRecorder(uri);
-            console.log("startRecording: ", res);
+            await audioRecorderPlayer.startRecorder(uri);
             audioRecorderPlayer.addRecordBackListener((e) => {
                 console.log('Gravando...', e);
             });
@@ -57,14 +57,11 @@ export default function CustomAudioInput(props: Props) {
         }
 
         try {
-            const res = await audioRecorderPlayer.stopRecorder();
-            console.log("stopRecording: ", res);
+            await audioRecorderPlayer.stopRecorder();
             audioRecorderPlayer.removeRecordBackListener();
             setIsRecording(false);
 
-            console.log("antes do b64");
             const base64Audio = await convertToBase64(audioUri);
-            console.log("depois do b64", base64Audio.length);
             props.setAudio(base64Audio);
         } catch (error) {
             console.error('Erro parando recorder:', error);
